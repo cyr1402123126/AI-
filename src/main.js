@@ -13,6 +13,7 @@ import { Lazyload } from 'vant';
 import qs from 'qs';
 import Vuex from 'vuex'
 import { store } from './store/store'
+import autosize from 'v-autosize/dist/plugin';
 
 axios.interceptors.request.use( (config) => {
   if (config.method=="post"){
@@ -28,6 +29,8 @@ Vue.use(Vant);
 Vue.use(VueAxios,axios)
 Vue.use(Lazyload);
 Vue.use(Vuex)
+Vue.use(autosize);
+console.log(autosize);
 // 标题
 router.beforeEach((to, from, next) => {
   /* 路由发生变化修改页面title */
