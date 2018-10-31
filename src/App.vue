@@ -16,6 +16,9 @@
 </script>
 
 <style scoped>
+  #app {
+    overflow-x: hidden;
+  }
  .van-tabbar-item__text {
    font-size: .36rem;
    margin-top: .1rem;

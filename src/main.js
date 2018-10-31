@@ -30,7 +30,7 @@ Vue.use(VueAxios,axios)
 Vue.use(Lazyload);
 Vue.use(Vuex)
 Vue.use(autosize);
-console.log(autosize);
+
 // 标题
 router.beforeEach((to, from, next) => {
   /* 路由发生变化修改页面title */

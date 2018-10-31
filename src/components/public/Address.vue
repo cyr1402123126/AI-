@@ -95,8 +95,8 @@
       //   console.log(res.data);
       //   this.address=res.data;
       // })
-      this.axios.get('address.php?type=address&token=2df885165ebea246edd089ddbd69af8c')
-      // this.axios.get('http://localhost:3000/address')
+      // this.axios.get('address.php?type=address&token=2df885165ebea246edd089ddbd69af8c')
+      this.axios.get('http://localhost:3000/address')
         .then(res=>{
           console.log(res);
           this.address=res.data;
