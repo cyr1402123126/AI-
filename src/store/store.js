@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import vuexAlong from 'vuex-along'
 
 Vue.use(Vuex)
 
@@ -8,7 +9,8 @@ export const store = new Vuex.Store({
     // 设置属性
     menuItems:{},
     currentUser: null,
-    isLogin:false
+    isLogin:false,
+    test:'4'
   },
   getters:{
     // 获取属性的状态
@@ -42,6 +44,10 @@ export const store = new Vuex.Store({
         state.currentUser = null
         state.isLogin = false
       }
+    },
+
+    test(state,data) {
+      state.test=data;
     }
   },
   actions:{
@@ -49,5 +55,6 @@ export const store = new Vuex.Store({
     setUser({commit},user){
       commit("userStatus",user)
     }
-  }
+  },
+  plugins: [vuexAlong]
 })

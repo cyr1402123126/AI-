@@ -2,43 +2,55 @@
   <div id="chatting" scroll="no">
     <!--时间-->
     <div ref="scrollBottom" style="overflow: auto;height: 85vh;padding-bottom: 1.3rem" @click="hideEmotion">
-      <div class="time">
-       <span class="displayTime">
-         {{timer}}
-       </span>
-      </div>
-      <div class="content">
-        <div class="message" v-for="(item,index) in arr" :key="index">
-          <!--meMessage-->
-          <div id="meMes" class="clearfix" v-if="item.type">
-            <div class="meMessage">
-              <span class="ifRead">{{ item.read }}</span>
-              <div class="main" v-html="item.content.replace(/\#[\u4E00-\u9FA5]{1,3}\;/gi, emotion)">
-                <!--{{ item.content }}-->
-              </div>
-              <div class="triangle-let">
-              </div>
-              <!--<div class="main" v-html="content.replace(/\#[\u4E00-\u9FA5]{1,3}\;/gi, emotion)">
+
+      <vue-better-scroll
+        style="height:90vh"
+        class="wrapper"
+        ref="scroll"
+        :scrollbar="scrollbarObj"
+        :pullDownRefresh="pullDownRefreshObj"
+        :pullUpLoad="pullUpLoadObj"
+        :startY="parseInt(startY)"
+        @pullingDown="onPullingDown"
+        @pullingUp="onPullingUp">
+        <div class="content">
+          <div class="message" v-for="(item,index) in arr" :key="index">
+            <div class="time" v-if="item.type==3">
+           <span class="displayTime">
+             {{item.time}}
+           </span>
+            </div>
+            <!--meMessage-->
+            <div id="meMes" class="clearfix" v-if="item.type==0">
+              <div class="meMessage">
+                <span class="ifRead">{{ item.read }}</span>
+                <div class="main" v-html="item.content.replace(/\#[\u4E00-\u9FA5]{1,3}\;/gi, emotion)">
+                  <!--{{ item.content }}-->
+                </div>
                 <div class="triangle-let">
                 </div>
-              </div>-->
-              <img :src="item.src" alt="" class="logo">
+                <!--<div class="main" v-html="content.replace(/\#[\u4E00-\u9FA5]{1,3}\;/gi, emotion)">
+                  <div class="triangle-let">
+                  </div>
+                </div>-->
+                <img :src="item.src" alt="" class="logo">
+              </div>
             </div>
-          </div>
-          <!--serviceMessage-->
-          <div id="serviceMes" class="clearfix" v-else-if="!item.type">
-            <div class="serviceMessage">
-              <img :src="item.src" alt="" class="logo">
-              <div class="main">
-                {{ item.content }}
+            <!--serviceMessage-->
+            <div id="serviceMes" class="clearfix" v-else-if="item.type==1">
+              <div class="serviceMessage">
+                <img :src="item.src" alt="" class="logo">
+                <div class="main" v-html="item.content.replace(/\#[\u4E00-\u9FA5]{1,3}\;/gi, emotion)">
+                  <!--{{ item.content }}-->
+                </div>
+                <div class="triangle-right">
+                </div>
+                <span class="no">{{ item.read }}</span>
               </div>
-              <div class="triangle-right">
-              </div>
-              <span class="no">{{ item.read }}</span>
             </div>
           </div>
         </div>
-      </div>
+      </vue-better-scroll>
     </div>
     <!--底部输入-->
     <!--<div class="Input clearfix" :class="isShow?'moveIn':'moveOut'">-->
@@ -51,8 +63,8 @@
         <!--<div contenteditable="true" class="clearfix editable" @input="changeText" ref="getValue" v-model="value" v-html="content">{{content}}</div>-->
         <!--v-html="content.replace(/\#[\u4E00-\u9FA5]{1,3}\;/gi, emotion)"-->
         <textarea ref="focus" v-autosize v-model="content" @input="changeText" @click="changeEmotion" style="max-height: 150px;resize:none;width: 7.5rem;outline: none;border: 1px solid #92a5b4;padding:.2rem .1rem .1rem .1rem;box-sizing: border-box;margin-left: .2rem"></textarea>
-        <img :src='isShow?keyPng:facePng' alt="" class="face" @click="replaceEmotion">
         <div>
+          <img :src='isShow?keyPng:facePng' alt="" class="face" @click="replaceEmotion">
           <img src="@/assets/images/append.png" alt="" class="append" v-show="flag">
           <van-uploader :after-read="onRead" multiple>
             <van-icon name="photograph" />
@@ -76,7 +88,9 @@
   import facePng from '@/assets/images/face.png';
   import keyPng from '@/assets/images/key.png'
   import EditDiv from '../../components/template/EditDiv'
-
+  import  VueBetterScroll  from 'vue2-better-scroll'
+  let ws = new WebSocket("ws://47.107.127.99:1234");
+  let count = 1
   export default {
     name: "chatts",
     data(){
@@ -94,43 +108,45 @@
           {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
           {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
           {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
           {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
           {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'<img style="max-width: 3.5rem" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1540966377269&di=53d7b51c3ac86157aa572beabcb7128c&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F3812b31bb051f819d6c4866dd1b44aed2e73e730.jpg"></img>',read:'未读',type:1},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
           {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好大家好大家好大家好大家好大家好大家好大家好大家好',read:'未读',type:1},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {time:"2018-11-01 08:35",type:3},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+          {time:"2018-11-01 08:35",type:3},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
           {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'<img src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1540966377269&di=53d7b51c3ac86157aa572beabcb7128c&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F3812b31bb051f819d6c4866dd1b44aed2e73e730.jpg"></img>',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'啦啦啦啦啦啦啦啦啦啦啦#折磨;#折磨;#折磨;#折磨;#折磨;#折磨;#衰;#衰;#衰;#衰;#憨笑;#憨笑;#流汗;#流汗;#折磨;#晕;#疑问;啦啦啦啦啦啦啦',read:'未读',type:0},
           {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
           {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
           {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
@@ -142,11 +158,44 @@
         canEdit:true,
         flag:true,
         count:0,
-        file:''
+        file:'',
+
+
+        //滚动
+        // 这个配置可以开启滚动条，默认为 false。当设置为 true 或者是一个 Object 的时候，都会开启滚动条，默认是会 fade 的
+        scrollbarObj: {
+          fade: true
+        },
+        // 这个配置用于做下拉刷新功能，默认为 false。当设置为 true 或者是一个 Object 的时候，可以开启下拉刷新，可以配置顶部下拉的距离（threshold） 来决定刷新时机以及回弹停留的距离（stop）
+        pullDownRefreshObj: {
+          threshold: 90,
+          stop: 40
+        },
+        // 这个配置用于做上拉加载功能，默认为 false。当设置为 true 或者是一个 Object 的时候，可以开启上拉加载，可以配置离底部距离阈值（threshold）来决定开始加载的时机
+        pullUpLoadObj: {
+          threshold: 0,
+          txt: {
+            more: '加载更多',
+            noMore: '没有更多数据了'
+          }
+        },
+        startY: 0,  // 纵轴方向初始化位置
+        scrollToX: 0,
+        scrollToY: 0,
+        scrollToTime: 700,
+        items: []
       }
+    },
+    components:{
+      Emotion,
+      EditDiv,
+      VueBetterScroll
     },
     mounted() {
       this.scrollBottom();
+    },
+    created() {
+      // this.axios.post('')
     },
     computed: {
       timer() {
@@ -155,20 +204,60 @@
       },
     },
     methods: {
+      //滚动
+      // 滚动到页面顶部
+      scrollTo () {
+        this.$refs.scroll.scrollTo(this.scrollToX, this.scrollToY, this.scrollToTime)
+      },
+      // 模拟数据请求
+      getData () {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            const arr = []
+            for (let i = 0; i < 20; i++) {
+              arr.push(count++)
+            }
+            resolve(arr)
+          }, 1000)
+        })
+      },
+      onPullingDown () {
+        // 模拟下拉刷新
+        console.log('下拉刷新')
+        count = 0
+        this.getData().then(res => {
+          this.items = res
+          this.$refs.scroll.forceUpdate(true)
+        })
+      },
+      onPullingUp () {
+        // 模拟上拉 加载更多数据
+        console.log('上拉加载')
+        this.getData().then(res => {
+          this.items = this.items.concat(res)
+          if(count<50){
+            this.$refs.scroll.forceUpdate(true)
+          }else{
+            this.$refs.scroll.forceUpdate(false)
+          }
+        })
+      },
+
+
+
+      //滚动到底部
       scrollBottom() {
-        let ele=this.$refs.scrollBottom;
+        let ele=this.$refs.scroll;
         ele.scrollTop = ele.scrollHeight;
       },
       hideEmotion() {
+        console.log(this.count);
         let dom=this.$refs.fixed;
-        dom.className='Input clearfix moveOut';
-      },
-      onRead(file) {
-        this.file=file;
-      },
-      scrolls() {
-        let ele=this.$refs.scrollBottom;
-        ele.scrollIntoView()
+        if (this.isShow == true) {
+          dom.className='Input clearfix moveOut';
+          this.isShow=false;
+        }
+        this.count++;
       },
       changeText() {
         this.flag=this.content==''?true:false;
@@ -177,15 +266,16 @@
         // this.$emit('input', this.innerText);
       },
       replaceEmotion() {
-      let dom=this.$refs.fixed;
-      if (!this.isShow) {
-        this.isShow=!this.isShow;
-        dom.className='Input clearfix moveIn';
-      }else {
-        dom.className='Input clearfix moveOut';
-        this.$refs.focus.focus();
-        this.isShow=!this.isShow;
-      }
+        let dom=this.$refs.fixed;
+        if (!this.isShow) {
+          this.isShow=!this.isShow;
+          dom.className='Input clearfix moveIn';
+        }else {
+          dom.className='Input clearfix moveOut';
+          this.$refs.focus.focus();
+          this.isShow=!this.isShow;
+        }
+        this.count++;
     },
       changeEmotion() {
         let dom=this.$refs.fixed;
@@ -199,6 +289,12 @@
         this.content += i;
         this.flag=this.content==''?true:false;
       },
+      //上传图片
+      onRead(file) {
+        this.file=file;
+        this.message(this.file);
+      },
+      //发送信息
       send() {
         this.flag=true;
         this.isShow=false;
@@ -206,26 +302,36 @@
         let ele=this.$refs.scrollBottom;
         ele.scrollTop = ele.scrollHeight;
         dom.className='Input clearfix moveOut';
-        console.log(this.file);
-        let data=this.content;
-        let ws=new WebSocket('ws://192.168.1.18:1234');
+        console.log(this.content);
+        this.getMessage(this.content);
+        this.content='';
+
+        this.scrollBottom();
+      },
+      //发送数据。接收数据
+      getMessage(data) {
         ws.onopen=function () {
           ws.send(JSON.stringify({
-            type:2,
-            uid:'1',
-            to:'11',
-            message:data
+            staff_id:1,
+            customer_id:1,
+            obj:2,
+            category:"submit",
+            message:data,
           }))
+          /*let ws=new WebSocket('ws://192.168.1.18:1234');
+          ws.onopen=function () {
+            ws.send(JSON.stringify({
+              staff_id:1,
+              customer_id:1,
+              obj:2,
+              category:"submit",
+              message:data
+            }))*/
           ws.onmessage=function (e) {
             console.log(e.data);
           }
         }
-
-        this.arr.push({name:'陈某某',src:require('@/assets/images/logo.png'),content:this.content,read:'未读',type:1})
-        this.content='';
-        console.log(this.content);
-
-        this.scrollBottom();
+        this.arr.push({name:'陈某某',src:require('@/assets/images/logo.png'),content:this.content,read:'未读',type:0})
       },
       // 将匹配结果替换表情图片
       emotion (res) {
@@ -264,16 +370,15 @@
         var year = now.getFullYear();
         var month = now.getMonth() + 1;
         var date = now.getDate();
-        var hour = now.getHours();
-        var minute = now.getMinutes();
-        var second = now.getSeconds();
+        var hours = now.getHours();
+        var hour=hours<10?'0' + hours:hours;
+        var minutes = now.getMinutes();
+        var minute=minutes<10?'0' + minutes:minutes;
+        var seconds = now.getSeconds();
+        var second=seconds<10?'0' + seconds:seconds;
         return year + "年" + month + "月" + date + "日" + hour + ":" + minute + ":" + second;
       },
     },
-    components:{
-      Emotion,
-      EditDiv,
-    }
   }
 </script>
 
@@ -288,19 +393,35 @@
   $color-sL: #598dcf;
   @mixin triangle-left{
     position: absolute;
-    width: 0;
-    height: 0;
-    border-top: .25rem solid transparent;
-    border-left: .25rem solid  #c9e7ff;
-    border-bottom: .25rem solid transparent;
+  }
+  .triangle-let:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: .1rem;
+    right:.08rem;
+    width: .25rem;
+    height: .25rem;
+    background: #3e84fe;
+    -moz-transform:rotate(135deg);
+    -webkit-transform:rotate(135deg);
   }
   @mixin triangle-right{
     position: absolute;
-    width: 0;
-    height: 0;
-    border-top: .25rem solid transparent;
-    border-right: .25rem solid  #fff;
-    border-bottom: .25rem solid transparent;
+  }
+  .triangle-right:after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: .1rem;
+    right:-.3rem;
+    width: .2rem;
+    height: .2rem;
+    background: #FFFFFF;
+    border-right:1px solid #dfdfdf;
+    border-bottom:1px solid #dfdfdf;
+    -moz-transform:rotate(135deg);
+    -webkit-transform:rotate(135deg);
   }
   span.alery{
     font-size: .34rem;
@@ -322,7 +443,7 @@
     /*padding: 0 25px;*/
     position: absolute;
     right: .3rem;
-    bottom: 82%;
+    bottom: .4rem;
     background: #3e84ff;
     border: 1px solid #3e84ff;
     width: 1.3rem;
@@ -360,6 +481,7 @@
         display: flex;
         align-items: center;
         padding: .15rem .1rem;
+        position: relative;
         input[type='text']{
           margin-left: .2rem;
           width: 7.5rem;
@@ -379,7 +501,7 @@
           width: .9rem;
           height: .9rem;
           position: absolute;
-          bottom: 82%;
+          bottom: .4rem;
         }
         img.face {
           right: 1.75rem;
@@ -405,12 +527,14 @@
       div.main{
         margin-right: .25rem;
         padding: .2rem;
-        max-width: 3rem;
+        max-width: 7rem;
         line-height: .56rem;
-        /*text-align: center;*/
+        text-align: justify;
         font-size: .4rem;
         word-break: break-all;
-        background: #c9e7ff;
+        background: #3e84fe;
+        color: #fff;
+        border-radius: .1rem;
       }
       div.triangle-let{
         position: absolute;
@@ -439,11 +563,14 @@
       div.main{
         margin-left: .25rem;
         padding: .2rem;
-        max-width: 2.9rem;
+        max-width: 7rem;
+        text-align: justify;
         line-height: .56rem;
         word-break: break-all;
         font-size: .4rem;
         background: #ffffff;
+        border-radius: .15rem;
+        border: 1px solid #dfdfdf;
       }
       div.triangle-right{
         position: absolute;

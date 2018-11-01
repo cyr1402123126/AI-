@@ -101,7 +101,7 @@
           console.log(res);
           this.address=res.data;
         })
-    }
+    },
   }
 </script>
 

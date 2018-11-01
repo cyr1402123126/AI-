@@ -89,6 +89,6 @@ export default new Router({
     {path:'/work/edit',name:'edit',component:edit,meta:{title:"编辑"}},
 
     //聊天室
-    {path:'/info/chat',name:'chat',component:Chat,meta:{title:"编辑"}},
+    {path:'/info/chat',name:'chat',component:Chat,meta:{title:"发送信息"}},
   ]
 })
