@@ -2,18 +2,8 @@
   <div id="chatting" scroll="no">
     <!--时间-->
     <div ref="scrollBottom" style="overflow: auto;height: 85vh;padding-bottom: 1.3rem" @click="hideEmotion">
-
-      <vue-better-scroll
-        style="height:90vh"
-        class="wrapper"
-        ref="scroll"
-        :scrollbar="scrollbarObj"
-        :pullDownRefresh="pullDownRefreshObj"
-        :pullUpLoad="pullUpLoadObj"
-        :startY="parseInt(startY)"
-        @pullingDown="onPullingDown"
-        @pullingUp="onPullingUp">
-        <div class="content">
+      <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
+        <div ref="testHeight" class="content">
           <div class="message" v-for="(item,index) in arr" :key="index">
             <div class="time" v-if="item.type==3">
            <span class="displayTime">
@@ -50,7 +40,7 @@
             </div>
           </div>
         </div>
-      </vue-better-scroll>
+      </van-pull-refresh>
     </div>
     <!--底部输入-->
     <!--<div class="Input clearfix" :class="isShow?'moveIn':'moveOut'">-->
@@ -62,10 +52,10 @@
 
         <!--<div contenteditable="true" class="clearfix editable" @input="changeText" ref="getValue" v-model="value" v-html="content">{{content}}</div>-->
         <!--v-html="content.replace(/\#[\u4E00-\u9FA5]{1,3}\;/gi, emotion)"-->
-        <textarea ref="focus" v-autosize v-model="content" @input="changeText" @click="changeEmotion" style="max-height: 150px;resize:none;width: 7.5rem;outline: none;border: 1px solid #92a5b4;padding:.2rem .1rem .1rem .1rem;box-sizing: border-box;margin-left: .2rem"></textarea>
+        <textarea ref="focus" v-autosize v-model="content" @input="changeText" @click="changeEmotion" style="max-height: 150px;resize:none;width: 8.5rem;outline: none;border: 1px solid #92a5b4;padding:.2rem .1rem .1rem .1rem;box-sizing: border-box;margin-left: .2rem"></textarea>
         <div>
           <img :src='isShow?keyPng:facePng' alt="" class="face" @click="replaceEmotion">
-          <img src="@/assets/images/append.png" alt="" class="append" v-show="flag">
+          <!--<img src="@/assets/images/append.png" alt="" class="append" v-show="flag">-->
           <van-uploader :after-read="onRead" multiple>
             <van-icon name="photograph" />
           </van-uploader>
@@ -89,10 +79,11 @@
   import keyPng from '@/assets/images/key.png'
   import EditDiv from '../../components/template/EditDiv'
   import  VueBetterScroll  from 'vue2-better-scroll'
-  let ws = new WebSocket("ws://47.107.127.99:1234");
-  let count = 1
+  // let ws = new WebSocket("ws://47.107.127.99:1234");
+  let newArr=[];
   export default {
     name: "chatts",
+    props:["customer_id","staff_id"],
     data(){
       return {
         isShow: false,
@@ -101,13 +92,15 @@
         keyPng: keyPng,
         sendValue:'',
         arr:[
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好;#衰;',read:'未读',type:1},
+         /* {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好;#衰;',read:'未读',type:1},
           {name:'陈鸿真',src:require('@/assets/images/logo.png'),content:'大家好',read:'未读',type:0},
           {name:'陈鸿真',src:require('@/assets/images/logo.png'),content:'大家好',read:'未读',type:0},
           {name:'陈鸿真',src:require('@/assets/images/logo.png'),content:'大家好',read:'未读',type:0},
           {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
+          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},*/
+
+
+        /*  {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
           {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
           {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
           {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
@@ -151,7 +144,7 @@
           {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
           {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
           {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈鸿真',src:require('@/assets/images/logo.png'),content:'大家好',read:'未读',type:0},
+          {name:'陈鸿真',src:require('@/assets/images/logo.png'),content:'大家好',read:'未读',type:0},*/
         ],
         content: '',
         comment: '',
@@ -159,31 +152,8 @@
         flag:true,
         count:0,
         file:'',
-
-
-        //滚动
-        // 这个配置可以开启滚动条，默认为 false。当设置为 true 或者是一个 Object 的时候，都会开启滚动条，默认是会 fade 的
-        scrollbarObj: {
-          fade: true
-        },
-        // 这个配置用于做下拉刷新功能，默认为 false。当设置为 true 或者是一个 Object 的时候，可以开启下拉刷新，可以配置顶部下拉的距离（threshold） 来决定刷新时机以及回弹停留的距离（stop）
-        pullDownRefreshObj: {
-          threshold: 90,
-          stop: 40
-        },
-        // 这个配置用于做上拉加载功能，默认为 false。当设置为 true 或者是一个 Object 的时候，可以开启上拉加载，可以配置离底部距离阈值（threshold）来决定开始加载的时机
-        pullUpLoadObj: {
-          threshold: 0,
-          txt: {
-            more: '加载更多',
-            noMore: '没有更多数据了'
-          }
-        },
-        startY: 0,  // 纵轴方向初始化位置
-        scrollToX: 0,
-        scrollToY: 0,
-        scrollToTime: 700,
-        items: []
+        isLoading: false,
+        page:1
       }
     },
     components:{
@@ -193,9 +163,21 @@
     },
     mounted() {
       this.scrollBottom();
+      newArr.push(this.$refs.testHeight.offsetHeight)
     },
     created() {
-      // this.axios.post('')
+      let staff_id=this.$route.params.staff_id;
+      let customer_id=this.$route.params.customer_id;
+      this.axios.post('https://mp.wedotop.com/Api/message_log.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
+        staff_id:staff_id,
+        customer_id:customer_id,
+        obj:2
+      }).then(res=>{
+        this.arr=res.data.data;
+        console.log(res.data);
+      }).catch(err=>{
+        console.log(err);
+      })
     },
     computed: {
       timer() {
@@ -204,50 +186,83 @@
       },
     },
     methods: {
-      //滚动
-      // 滚动到页面顶部
-      scrollTo () {
-        this.$refs.scroll.scrollTo(this.scrollToX, this.scrollToY, this.scrollToTime)
-      },
-      // 模拟数据请求
-      getData () {
-        return new Promise(resolve => {
-          setTimeout(() => {
-            const arr = []
-            for (let i = 0; i < 20; i++) {
-              arr.push(count++)
-            }
-            resolve(arr)
-          }, 1000)
-        })
-      },
-      onPullingDown () {
-        // 模拟下拉刷新
-        console.log('下拉刷新')
-        count = 0
-        this.getData().then(res => {
-          this.items = res
-          this.$refs.scroll.forceUpdate(true)
-        })
-      },
-      onPullingUp () {
-        // 模拟上拉 加载更多数据
-        console.log('上拉加载')
-        this.getData().then(res => {
-          this.items = this.items.concat(res)
-          if(count<50){
-            this.$refs.scroll.forceUpdate(true)
-          }else{
-            this.$refs.scroll.forceUpdate(false)
-          }
-        })
-      },
+      onRefresh() {
+        setTimeout(() => {
+          let page=this.page;
+          // this.$toast('刷新成功');
+          this.isLoading = false;
+          this.count++;
+          this.page++;
+          console.log(page);
+          this.axios.post('https://mp.wedotop.com/Api/message_log.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
+            page:page,
+            staff_id:1,
+            customer_id:84,
+            obj:2,
+          }).then(res=>{
+            // console.log(res.data.data);
+            let data=res.data.data;
+            data.forEach(val=>{
+              this.arr.unshift(val)
 
+              // console.log(newArr);
+
+            })
+            let two=this.$refs.testHeight.offsetHeight;
+            let ele=this.$refs.scrollBottom;
+            console.log(two);
+            newArr.push(this.$refs.testHeight.offsetHeight)
+
+            /*console.log(two);
+            console.log(newArr[newArr.length-2]);*/
+            console.log(newArr);
+            if (page == 1) {
+              console.log(newArr);
+              ele.scrollTop = newArr[1];
+              console.log(newArr[1]);
+              console.log(ele.scrollTop);
+            }else {
+              let height=two-newArr[newArr.length-2];
+              ele.scrollTop = height;
+            }
+            console.log(ele.scrollTop);
+          })
+          /*let data=[{name:'陈某某',src:require("@/assets/images/logo.png"),content:'测试数据;#衰;',read:'未读',type:1,timeShow:true,time:"2018-11-01 08:35"},
+              {name:'陈鸿真',src:require('@/assets/images/logo.png'),content:'测试数据',read:'未读',type:0,timeShow:true,time:"2018-11-01 08:35"},
+              {name:'陈鸿真',src:require('@/assets/images/logo.png'),content:'测试数据',read:'未读',type:0,timeShow:true,time:"2018-11-01 08:35"},
+              {name:'陈鸿真',src:require('@/assets/images/logo.png'),content:'测试数据',read:'未读',type:0,timeShow:true,time:"2018-11-01 08:35"},
+              {name:'陈某某',src:require("@/assets/images/logo.png"),content:'测试数据',read:'未读',type:1},
+              {name:'陈某某',src:require("@/assets/images/logo.png"),content:'测试数据',read:'未读',type:1,timeShow:true,time:"2018-11-01 08:35"},
+              {name:'陈某某',src:require("@/assets/images/logo.png"),content:'测试数据',read:'未读',type:1},
+              {name:'陈某某',src:require("@/assets/images/logo.png"),content:'测试数据',read:'未读',type:0},
+              {name:'陈某某',src:require("@/assets/images/logo.png"),content:'测试数据',read:'未读',type:0},
+              {name:'陈某某',src:require("@/assets/images/logo.png"),content:'测试数据',read:'未读',type:0},
+              {name:'陈某某',src:require("@/assets/images/logo.png"),content:'测试数据',read:'未读',type:0},
+              {name:'陈某某',src:require("@/assets/images/logo.png"),content:'测试数据',read:'未读',type:1},
+              {name:'陈某某',src:require("@/assets/images/logo.png"),content:'测试数据',read:'未读',type:1},
+              {name:'陈某某',src:require("@/assets/images/logo.png"),content:'<img style="max-width: 3.5rem" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1540966377269&di=53d7b51c3ac86157aa572beabcb7128c&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F3812b31bb051f819d6c4866dd1b44aed2e73e730.jpg"></img>',read:'未读',type:1,timeShow:true,time:"2018-11-01 08:35"},
+              {name:'陈某某',src:require("@/assets/images/logo.png"),content:'测试数据',read:'未读',type:0},
+              {name:'陈某某',src:require("@/assets/images/logo.png"),content:'吃饭了吗?',read:'未读',type:0,timeShow:false,time:"2018-11-01 08:35"},
+              {name:'陈某某',src:require("@/assets/images/logo.png"),content:'测试数据',read:'未读',type:0,timeShow:true,time:"2018-11-01 08:35"}]*/
+          /* data.forEach(val=>{
+             this.arr.unshift(val)
+           })*/
+          // console.log(this.$refs.testHeight.offsetHeight);
+
+          /* let up=this.$refs;
+           console.log(this.arr);
+           console.log(this.$refs.up);
+           console.log(up.offsetHeight);
+           let ele=this.$refs.scrollBottom;
+           ele.scrollTop = up.offsetHeight;*/
+        }, 500);
+
+      },
 
 
       //滚动到底部
       scrollBottom() {
-        let ele=this.$refs.scroll;
+        let ele=this.$refs.scrollBottom;
         ele.scrollTop = ele.scrollHeight;
       },
       hideEmotion() {
@@ -310,14 +325,26 @@
       },
       //发送数据。接收数据
       getMessage(data) {
-        ws.onopen=function () {
+        let staff_id=this.$route.params.staff_id;
+        let customer_id=this.$route.params.customer_id;
+         this.axios.post('https://mp.wedotop.com/Api/message_log1.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
+            staff_id:staff_id,
+            customer_id:customer_id,
+            obj:2,
+            category:"submit",
+            message:data
+          }).then(res=>{
+           this.arr=res.data.data;
+           console.log(res.data);
+         })
+        /*ws.onopen=function () {
           ws.send(JSON.stringify({
             staff_id:1,
             customer_id:1,
             obj:2,
             category:"submit",
             message:data,
-          }))
+          }))*/
           /*let ws=new WebSocket('ws://192.168.1.18:1234');
           ws.onopen=function () {
             ws.send(JSON.stringify({
@@ -327,11 +354,11 @@
               category:"submit",
               message:data
             }))*/
-          ws.onmessage=function (e) {
+         /* ws.onmessage=function (e) {
             console.log(e.data);
-          }
-        }
-        this.arr.push({name:'陈某某',src:require('@/assets/images/logo.png'),content:this.content,read:'未读',type:0})
+          }*/
+
+        // this.arr.push({name:'陈某某',src:require('@/assets/images/logo.png'),content:this.content,read:'未读',type:0})
       },
       // 将匹配结果替换表情图片
       emotion (res) {
@@ -383,6 +410,9 @@
 </script>
 
 <style scoped lang="scss">
+  .van-pull-refresh {
+    overflow: visible;
+  }
   .van-uploader {
     position: absolute;
     display: inline-block;
@@ -504,7 +534,7 @@
           bottom: .4rem;
         }
         img.face {
-          right: 1.75rem;
+          right: .55rem;
         }
         img.append {
           right: .3rem;

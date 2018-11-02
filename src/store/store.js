@@ -10,7 +10,11 @@ export const store = new Vuex.Store({
     menuItems:{},
     currentUser: null,
     isLogin:false,
-    test:'4'
+    test:'4',
+
+    //id
+    staff_id:'',
+    customer_id:'',
   },
   getters:{
     // 获取属性的状态
@@ -48,7 +52,13 @@ export const store = new Vuex.Store({
 
     test(state,data) {
       state.test=data;
-    }
+    },
+    getStaff_id(state,data) {
+      state.staff_id=data;
+    },
+    getCustomer_id(state,data) {
+      state.customer_id=data;
+    },
   },
   actions:{
     // 应用mutations

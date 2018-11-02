@@ -1,8 +1,8 @@
 <template>
     <div class="info">
       <ul>
-        <router-link :to="{name:'chat'}" tag="li" v-for="(item,index) in info" :key="index">
-          <div class="left"><img src="@/assets/images/info_test.png" alt=""></div>
+        <router-link :to="{name:'chat',params:{staff_id:item.staff_id,customer_id:item.customer_id}}" tag="li" v-for="(item,index) in info" :key="index">
+          <div class="left"><img :src="item.src" alt=""></div>
           <div class="left info-name">
             <p>{{ item.name }}</p>
             <p>{{ item.content }}</p>
@@ -19,15 +19,27 @@
     data() {
       return {
         info:[
+          /*{name:"夏泡泡雪",content:"在么",time:"下午16:28"},
           {name:"夏泡泡雪",content:"在么",time:"下午16:28"},
           {name:"夏泡泡雪",content:"在么",time:"下午16:28"},
           {name:"夏泡泡雪",content:"在么",time:"下午16:28"},
           {name:"夏泡泡雪",content:"在么",time:"下午16:28"},
           {name:"夏泡泡雪",content:"在么",time:"下午16:28"},
-          {name:"夏泡泡雪",content:"在么",time:"下午16:28"},
-          {name:"夏泡泡雪",content:"在么",time:"下午16:28"},
-        ]
+          {name:"夏泡泡雪",content:"在么",time:"下午16:28"},*/
+        ],
       }
+    },
+    created() {
+      let staff_id=this.getCookie('staff_id');
+      this.axios.post('https://mp.wedotop.com/Api/message.php?type=message&token=d09abebb9f5a9ec1dc6f16d55559154a',{
+        staff_id:staff_id,
+        customer_id:84,
+      }).then(res=>{
+        console.log(res.data);
+        this.info=res.data;
+        this.$store.commit('getStaff_id',res.data.staff_id);
+        this.$store.commit('getCustomer_id',res.data.customer_id);
+        })
     }
   }
 </script>

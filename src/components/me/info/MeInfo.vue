@@ -3,10 +3,15 @@
     <p class="meInfo-person">个人信息</p>
     <van-cell-group>
       <van-field
+        v-model="username"
+        type="number"
+        label="姓名"
+        placeholder="请输入姓名"
+      />
+      <van-field
         v-model="phone"
         type="number"
         label="手机"
-        is-link
         placeholder="请输入号码"
       />
       <van-field
@@ -62,6 +67,7 @@
     name: "MeInfo",
     data() {
       return {
+        username:'',
         areaList:'',
         phone:"",
         wechat:"",
@@ -82,6 +88,7 @@
       this.axios.get('https://mp.wedotop.com/Api/cardDetail.php?type=info&token=cb81cd5b8407b0bb01edd81576e1cdfd')
         .then(res=>{
           console.log(res.data);
+          this.username=res.data.username;
           this.phone=res.data.phone;
           this.wechat=res.data.wechat;
           this.telphone=res.data.telphone;
