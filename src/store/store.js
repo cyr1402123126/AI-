@@ -15,6 +15,7 @@ export const store = new Vuex.Store({
     //id
     staff_id:'',
     customer_id:'',
+    active:0,
   },
   getters:{
     // 获取属性的状态
@@ -59,6 +60,9 @@ export const store = new Vuex.Store({
     getCustomer_id(state,data) {
       state.customer_id=data;
     },
+    getActive(state,data) {
+      state.active=data;
+    }
   },
   actions:{
     // 应用mutations

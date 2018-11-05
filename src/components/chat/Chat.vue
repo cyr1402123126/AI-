@@ -1,7 +1,7 @@
 <template>
   <div id="chatting" scroll="no">
     <!--时间-->
-    <div ref="scrollBottom" style="overflow: auto;height: 85vh;padding-bottom: 1.3rem" @click="hideEmotion">
+    <div ref="scrollBottom" style="overflow: scroll;height: 85vh;padding-bottom: 1.3rem" @click="hideEmotion">
       <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
         <div ref="testHeight" class="content">
           <div class="message" v-for="(item,index) in arr" :key="index">
@@ -52,10 +52,15 @@
 
         <!--<div contenteditable="true" class="clearfix editable" @input="changeText" ref="getValue" v-model="value" v-html="content">{{content}}</div>-->
         <!--v-html="content.replace(/\#[\u4E00-\u9FA5]{1,3}\;/gi, emotion)"-->
-        <textarea ref="focus" v-autosize v-model="content" @input="changeText" @click="changeEmotion" style="max-height: 150px;resize:none;width: 8.5rem;outline: none;border: 1px solid #92a5b4;padding:.2rem .1rem .1rem .1rem;box-sizing: border-box;margin-left: .2rem"></textarea>
+        <!--<textarea v-autosize v-model="content.replace(/\#[\u4E00-\u9FA5]{1,3}\;/gi, emotion)" ref="focus" @input="changeText" @click="changeEmotion" style="max-height: 150px;resize:none;width: 8.5rem;outline: none;border: 1px solid #92a5b4;padding:.2rem .1rem .1rem .1rem;box-sizing: border-box;margin-left: .2rem">
+
+        </textarea>-->
+        <textarea ref="focus" v-autosize v-model="content" @input="changeText" @click="changeEmotion" style="max-height: 150px;resize:none;width: 7.5rem;outline: none;border: 1px solid #92a5b4;padding:.2rem .1rem .1rem .1rem;box-sizing: border-box;margin-left: .2rem">
+
+        </textarea>
         <div>
           <img :src='isShow?keyPng:facePng' alt="" class="face" @click="replaceEmotion">
-          <!--<img src="@/assets/images/append.png" alt="" class="append" v-show="flag">-->
+          <img src="@/assets/images/append.png" alt="" class="append" v-show="flag">
           <van-uploader :after-read="onRead" multiple>
             <van-icon name="photograph" />
           </van-uploader>
@@ -92,59 +97,59 @@
         keyPng: keyPng,
         sendValue:'',
         arr:[
-         /* {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好;#衰;',read:'未读',type:1},
-          {name:'陈鸿真',src:require('@/assets/images/logo.png'),content:'大家好',read:'未读',type:0},
-          {name:'陈鸿真',src:require('@/assets/images/logo.png'),content:'大家好',read:'未读',type:0},
-          {name:'陈鸿真',src:require('@/assets/images/logo.png'),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},*/
+          /* {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好;#衰;',read:'未读',type:1},
+           {name:'陈鸿真',src:require('@/assets/images/logo.png'),content:'大家好',read:'未读',type:0},
+           {name:'陈鸿真',src:require('@/assets/images/logo.png'),content:'大家好',read:'未读',type:0},
+           {name:'陈鸿真',src:require('@/assets/images/logo.png'),content:'大家好',read:'未读',type:0},
+           {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
+           {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},*/
 
 
-        /*  {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'<img style="max-width: 3.5rem" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1540966377269&di=53d7b51c3ac86157aa572beabcb7128c&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F3812b31bb051f819d6c4866dd1b44aed2e73e730.jpg"></img>',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好大家好大家好大家好大家好大家好大家好大家好大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {time:"2018-11-01 08:35",type:3},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {time:"2018-11-01 08:35",type:3},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'啦啦啦啦啦啦啦啦啦啦啦#折磨;#折磨;#折磨;#折磨;#折磨;#折磨;#衰;#衰;#衰;#衰;#憨笑;#憨笑;#流汗;#流汗;#折磨;#晕;#疑问;啦啦啦啦啦啦啦',read:'未读',type:0},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
-          {name:'陈鸿真',src:require('@/assets/images/logo.png'),content:'大家好',read:'未读',type:0},*/
+          /*  {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'<img style="max-width: 3.5rem" src="https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1540966377269&di=53d7b51c3ac86157aa572beabcb7128c&imgtype=0&src=http%3A%2F%2Fimgsrc.baidu.com%2Fimgad%2Fpic%2Fitem%2F3812b31bb051f819d6c4866dd1b44aed2e73e730.jpg"></img>',read:'未读',type:1},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好大家好大家好大家好大家好大家好大家好大家好大家好',read:'未读',type:1},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {time:"2018-11-01 08:35",type:3},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {time:"2018-11-01 08:35",type:3},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'啦啦啦啦啦啦啦啦啦啦啦#折磨;#折磨;#折磨;#折磨;#折磨;#折磨;#衰;#衰;#衰;#衰;#憨笑;#憨笑;#流汗;#流汗;#折磨;#晕;#疑问;啦啦啦啦啦啦啦',read:'未读',type:0},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
+            {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好',read:'未读',type:1},
+            {name:'陈鸿真',src:require('@/assets/images/logo.png'),content:'大家好',read:'未读',type:0},*/
         ],
         content: '',
         comment: '',
@@ -163,7 +168,11 @@
     },
     mounted() {
       this.scrollBottom();
-      newArr.push(this.$refs.testHeight.offsetHeight)
+      setTimeout(()=>{
+        console.log(this.$refs.scrollBottom.scrollTop);
+        newArr.push(this.$refs.scrollBottom.scrollTop)
+      },100)
+
     },
     created() {
       let staff_id=this.$route.params.staff_id;
@@ -194,13 +203,14 @@
           this.count++;
           this.page++;
           console.log(page);
-          this.axios.post('https://mp.wedotop.com/Api/message_log.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
+          let staff_id=this.$route.params.staff_id;
+          let customer_id=this.$route.params.customer_id;
+          this.axios.post('https://mp.wedotop.com/Api/message_log1.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
             page:page,
-            staff_id:1,
-            customer_id:84,
+            staff_id:staff_id,
+            customer_id:customer_id,
             obj:2,
           }).then(res=>{
-            // console.log(res.data.data);
             let data=res.data.data;
             data.forEach(val=>{
               this.arr.unshift(val)
@@ -262,8 +272,10 @@
 
       //滚动到底部
       scrollBottom() {
-        let ele=this.$refs.scrollBottom;
-        ele.scrollTop = ele.scrollHeight;
+        setTimeout(()=>{
+          let ele=this.$refs.scrollBottom;
+          ele.scrollTop = ele.scrollHeight;
+        },100)
       },
       hideEmotion() {
         console.log(this.count);
@@ -291,7 +303,7 @@
           this.isShow=!this.isShow;
         }
         this.count++;
-    },
+      },
       changeEmotion() {
         let dom=this.$refs.fixed;
         if (this.count >= 1) {
@@ -307,7 +319,20 @@
       //上传图片
       onRead(file) {
         this.file=file;
-        this.message(this.file);
+        console.log(file);
+        let staff_id=this.$route.params.staff_id;
+        let customer_id=this.$route.params.customer_id;
+        this.axios.post('https://mp.wedotop.com/Api/message_log1.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
+          staff_id:staff_id,
+          customer_id:customer_id,
+          obj:2,
+          category:"submit",
+          img:file
+        }).then(res=>{
+          this.arr=res.data.data;
+          console.log(res.data);
+        })
+        // this.message(this.file);
       },
       //发送信息
       send() {
@@ -327,16 +352,16 @@
       getMessage(data) {
         let staff_id=this.$route.params.staff_id;
         let customer_id=this.$route.params.customer_id;
-         this.axios.post('https://mp.wedotop.com/Api/message_log1.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
-            staff_id:staff_id,
-            customer_id:customer_id,
-            obj:2,
-            category:"submit",
-            message:data
-          }).then(res=>{
-           this.arr=res.data.data;
-           console.log(res.data);
-         })
+        this.axios.post('https://mp.wedotop.com/Api/message_log1.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
+          staff_id:staff_id,
+          customer_id:customer_id,
+          obj:2,
+          category:"submit",
+          message:data
+        }).then(res=>{
+          this.arr=res.data.data;
+          console.log(res.data);
+        })
         /*ws.onopen=function () {
           ws.send(JSON.stringify({
             staff_id:1,
@@ -345,18 +370,18 @@
             category:"submit",
             message:data,
           }))*/
-          /*let ws=new WebSocket('ws://192.168.1.18:1234');
-          ws.onopen=function () {
-            ws.send(JSON.stringify({
-              staff_id:1,
-              customer_id:1,
-              obj:2,
-              category:"submit",
-              message:data
-            }))*/
-         /* ws.onmessage=function (e) {
-            console.log(e.data);
-          }*/
+        /*let ws=new WebSocket('ws://192.168.1.18:1234');
+        ws.onopen=function () {
+          ws.send(JSON.stringify({
+            staff_id:1,
+            customer_id:1,
+            obj:2,
+            category:"submit",
+            message:data
+          }))*/
+        /* ws.onmessage=function (e) {
+           console.log(e.data);
+         }*/
 
         // this.arr.push({name:'陈某某',src:require('@/assets/images/logo.png'),content:this.content,read:'未读',type:0})
       },
@@ -534,7 +559,7 @@
           bottom: .4rem;
         }
         img.face {
-          right: .55rem;
+          right: 1.75rem;
         }
         img.append {
           right: .3rem;

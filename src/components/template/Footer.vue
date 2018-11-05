@@ -16,9 +16,13 @@
         active: 0
       }
     },
+    created() {
+      this.active=this.$store.state.active
+    },
     methods:{
       change(e){
         var active=this.active;
+        this.$store.commit('getActive',this.active)
        /* switch (active) {
           case 0:
             this.$router.push('/time');

@@ -1,5 +1,25 @@
 <template>
   <div id="introduce">
+    <!--更改頭像-->
+    <div class="myPic clearfix" style="margin-bottom: .4rem">
+      <div class="titleBar clearfix">
+        <div class="tiTle">更改头像</div>
+      </div>
+      <span class="addMain">
+        <ul>
+          <li v-for="(item,index) in myTitleImage" :key="index" v-show="myImageShow">
+            <img :src="item" alt="" class="addPic">
+            <img src="@/assets/images/me_close.png" alt="" @click="deleteMyImage(index)">
+          </li>
+          <li style="width: 2.9rem;margin-top: 0;" v-show="!myImageShow">
+            <van-uploader accept="image/gif,image/jpeg,image/jpg,image/png" :after-read="onMyRead">
+              <van-icon/>
+              <img src="@/assets/images/addPic.png" alt="" class="addPic">
+            </van-uploader>
+          </li>
+        </ul>
+      </span>
+    </div>
     <!--个人简介-->
     <div class="meIntroduce">
       我的个人简介
@@ -46,12 +66,12 @@
       </div>
       <span class="addMain">
         <ul>
-          <li v-for="(item,index) in myImages" :key="index" @click="deleteImage(item,index)">
+          <li v-for="(item,index) in myImages" :key="index">
             <img :src="item" alt="" class="addPic">
-            <img src="@/assets/images/me_close.png" alt="">
+            <img src="@/assets/images/me_close.png" alt="" @click="deleteImage(index)">
           </li>
           <li style="width: 2.9rem;margin-top: 0;">
-            <van-uploader accept="image/gif,image/jpeg,image/png" :after-read="onRead">
+            <van-uploader accept="image/gif,image/jpeg,image/jpg,image/png" :after-read="onRead">
               <van-icon/>
               <img src="@/assets/images/addPic.png" alt="" class="addPic">
             </van-uploader>
@@ -96,7 +116,9 @@
         show:false,
         label:'添加标签',
         lock:false,
-        textarea:''
+        textarea:'',
+        myImageShow:false,
+        myTitleImage:[]
       }
     },
     name: "MePerson",
@@ -109,6 +131,9 @@
           this.myTag=data.myTag;
           this.consultTag=data.consultTag;
           this.myImages=data.myImages;
+          this.myTitleImage=data.cover;
+          console.log(data);
+          this.myImageShow=this.myTitleImage.length >0 && this.myTitleImage != null?true:false;
         })
     },
     methods:{
@@ -125,10 +150,28 @@
           this.myImages.push(file.content)
         }
       },
+      onMyRead(file) {
+        // console.log(this.myTitleImage)
+        this.myImageShow=true;
+        this.myTitleImage.push(file.content)
+      },
       deleteTag(index) {
         this.myTag.splice(index,1)
       },
+      deleteMyImage(index) {
+        this.$dialog.confirm({
+          title: '',
+          message: '你确定要删除吗?'
+        }).then(() => {
+          this.myTitleImage.splice(index,1)
+          this.myImageShow=false;
+          // on confirm
+        }).catch(() => {
+          // on cancel
+        });
+      },
       deleteImage(index) {
+        console.log(index);
         this.myImages.splice(index,1)
       },
       addTag() {
@@ -156,21 +199,20 @@
       save() {
         let company_id=this.getCookie('company_id');
         let staff_id=this.getCookie('staff_id');
-        console.log(this.myImages);
         let data={
           id:0,
           company_id:company_id,
           staff_id:staff_id,
           textarea:this.textarea,
           myTag:this.myTag,
-          myImages:this.myImages
+          myImages:this.myImages,
+          cover:this.myTitleImage
         };
         this.axios.post('https://mp.wedotop.com/Api/synopsis.php?type=synopsis&token=fbf2bd46c700b4d98b2c4b3633b40844',data,)
           .then(res=>{
-          console.log(res);
-          Toast('保存成功');
-          this.$router.push('/me/list')
-        })
+            Toast('保存成功');
+            this.$router.push('/me/list')
+          })
       }
     }
   }

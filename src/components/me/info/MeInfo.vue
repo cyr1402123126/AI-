@@ -4,7 +4,7 @@
     <van-cell-group>
       <van-field
         v-model="username"
-        type="number"
+        type="text"
         label="姓名"
         placeholder="请输入姓名"
       />
@@ -15,10 +15,10 @@
         placeholder="请输入号码"
       />
       <van-field
-      v-model="wechat"
-      type="text"
-      label="微信"
-      placeholder="请填写"
+        v-model="wechat"
+        type="text"
+        label="微信"
+        placeholder="请填写"
       />
       <van-field
         v-model="telphone"
@@ -54,7 +54,7 @@
     <!--省市区选择-->
     <van-popup v-model="show" position="bottom" :overlay="true">
       <van-area :area-list="areaList"
-        @confirm="confirm"
+                @confirm="confirm"
       />
     </van-popup>
   </div>
@@ -115,6 +115,7 @@
         let staff_id=this.getCookie('staff_id');
         // let qs = require('qs');
         let data={
+          username:this.username,
           phone:this.phone,
           wechat:this.wechat,
           telphone:this.telphone,
@@ -127,21 +128,25 @@
         if (this.beforeSubmit()) {
           this.axios.post('https://mp.wedotop.com/Api/cardDetail.php?type=cardDetail&token=84dbe86a4685520e49c6bdf777b49209',data)
             .then(res=>{
-            let status=res.data.code;
-            if (status == '402') {
-              Toast('请填写信息');
-            }else if (status == '401' || status == '400') {
-              Toast('网络出错');
-            }else if (status == '200'){
-              Toast('保存成功');
-              this.$router.push('/me/list')
-            }
-            console.log(res);
-          });
+              let status=res.data.code;
+              if (status == '402') {
+                Toast('请填写信息');
+              }else if (status == '401' || status == '400') {
+                Toast('网络出错');
+              }else if (status == '200'){
+                Toast('保存成功');
+                this.$router.push('/me/list')
+              }
+              console.log(res);
+            });
         }
 
       },
       beforeSubmit() {
+        if (this.username == '') {
+          Toast('请輸入姓名');
+          return false;
+        }
         if (this.phone == '') {
           Toast('请填写手机号码');
           return false;

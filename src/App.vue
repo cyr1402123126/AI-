@@ -18,6 +18,7 @@
 <style scoped>
   #app {
     overflow-x: hidden;
+    min-height: 100vh;
   }
  .van-tabbar-item__text {
    font-size: .36rem;
