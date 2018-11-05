@@ -69,3 +69,6 @@ img {
 .van-tab {
   font-size: .43rem!important;
 }
+.van-tabbar-item__icon {
+  margin-bottom: 8px;
+}

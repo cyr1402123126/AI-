@@ -1,5 +1,6 @@
 <template>
   <van-tabbar v-model="active">
+    <!--<van-tabbar-item @click="change($event)" icon="aim">雷达</van-tabbar-item>-->
     <van-tabbar-item @click="change($event)">
       <span>雷达</span>
       <img
@@ -13,33 +14,19 @@
       <img
         slot="icon"
         slot-scope="props"
-        :src="props.active ? icon.active1 : icon.normal1"
+        :src="props.active ? icon.active : icon.normal"
       >
     </van-tabbar-item>
     <van-tabbar-item @click="change($event)">
       <span>通讯录</span>
       <img
-        slot="icon"
+        slot="icon2"
         slot-scope="props"
-        :src="props.active ? icon.active2 : icon.normal2"
+        :src="props.active ? icon2.active : icon2.normal"
       >
     </van-tabbar-item>
-    <van-tabbar-item @click="change($event)">
-      <span>工作</span>
-      <img
-        slot="icon"
-        slot-scope="props"
-        :src="props.active ? icon.active3 : icon.normal3"
-      >
-    </van-tabbar-item>
-    <van-tabbar-item @click="change($event)">
-      <span>我</span>
-      <img
-        slot="icon"
-        slot-scope="props"
-        :src="props.active ? icon.active4 : icon.normal4"
-      >
-    </van-tabbar-item>
+    <van-tabbar-item @click="change($event)" icon="completed">工作</van-tabbar-item>
+    <van-tabbar-item @click="change($event)" icon="contact">我</van-tabbar-item>
   </van-tabbar>
 </template>
 
@@ -49,17 +36,17 @@
     data() {
       return {
         active: 0,
-          icon: {
+          icon1: {
             normal: require('@/assets/images/rader.png'),
             active: require('@/assets/images/rader_active.png'),
-            normal1: require('@/assets/images/info.png'),
-            active1: require('@/assets/images/info_active.png'),
-            normal2: require('@/assets/images/address.png'),
-            active2: require('@/assets/images/address_active.png'),
-            normal3: require('@/assets/images/work.png'),
-            active3: require('@/assets/images/work_active.png'),
-            normal4: require('@/assets/images/me.png'),
-            active4: require('@/assets/images/me_active.png')
+          },
+          icon: {
+            normal: require('@/assets/images/info.png'),
+            active: require('@/assets/images/info_active.png')
+          },
+          icon2: {
+            normal: require('../../assets/images/address.png'),
+            active: require('@/assets/images/address_active.png')
           }
         }
     },
