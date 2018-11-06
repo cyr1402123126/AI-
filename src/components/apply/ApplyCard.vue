@@ -240,7 +240,6 @@
     font-family: "chen";
   }
   .fixPosition {
-    background: red;
     position: relative;
   }
   .change-one {

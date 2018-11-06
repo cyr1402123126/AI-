@@ -15,12 +15,12 @@
           <!--</select>-->
           <input type="text" readonly @click="getState()" :value="stateValue">
           <span></span>
-          <p class="right">共20名客户</p>
+          <p class="right">共{{ count }}名客户</p>
           <div class="triange-bottom">
           </div>
         </div>
         <ul class="address-ul">
-          <router-link :to="{name:'customerInfo'}" tag="li" v-for="(item,index) in address" :key="index">
+          <router-link :to="{name:'customerInfo',params:{id:item.id}}" tag="li" v-for="(item,index) in address" :key="index">
           <!--<router-link :to="{name:'address'}" tag="li" v-for="(item,index) in address" :key="index">-->
             <div class="left"><img :src="item.src" alt=""></div>
             <div class="left address-name">
@@ -65,7 +65,8 @@
         ],
         address:[],
         columns: ['预计成交率', '最后跟进时间', '最后活动时间', '工作交接', '扫码','转发'],
-        show:false
+        show:false,
+        count:0
       }
     },
     methods:{
@@ -91,15 +92,15 @@
       }
     },
     created() {
-      // this.axios.get('address.php?type=address&token=2df885165ebea246edd089ddbd69af8c').then(res=>{
-      //   console.log(res.data);
-      //   this.address=res.data;
-      // })
       this.axios.get('address.php?type=address&token=2df885165ebea246edd089ddbd69af8c')
       // this.axios.get('http://localhost:3000/address')
         .then(res=>{
           console.log(res);
-          this.address=res.data;
+          // this.address=res.data;
+          // this.count=res.count;
+
+          this.address=res.data.data;
+          this.count=res.data.count;
         })
     },
   }

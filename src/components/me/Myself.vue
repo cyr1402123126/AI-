@@ -5,7 +5,7 @@
           <img :src="info.src" alt="">
         </div>
         <div class="left top-content">
-          <div class="myself-name clearfix"><span class="left">{{ info.name }} | {{info.major  }} </span><img src="@/assets/images/code.png" alt=""></div>
+          <div class="myself-name clearfix"><span class="left">{{ info.name }} | {{info.major  }} </span></div>
           <p>{{ info.company }}</p>
         </div>
       </div>
@@ -61,7 +61,15 @@
           company:"",
           image:''
         },
-        myself:[]
+        myself:[],
+       /* myself:[
+          {"year":"07","month":"10","day":"","src":"http://39.108.86.5/addons/images/test.png","sum":1,"content":"深圳市微冠成信息技术有限公司是一家以移动互联网营销为核心的系统解决方案服务提供商。公司紧跟时代发展的步伐，在移动互联网的时代，微冠成致力于将线下销售终端与线上营销完美结合，实现企业向移动互联网转型升级的愿景和目标。","loveSum":5,"dialogSum":1},
+          {"year":"07","month":"10","day":"","src":"http://39.108.86.5/addons/images/test.png","sum":1,"content":"遇见","loveSum":5,"dialogSum":1},
+          {"year":"07","month":"10","day":"","src":"http://39.108.86.5/addons/images/test.png","sum":1,"content":"遇见","loveSum":5,"dialogSum":1},
+          {"year":"07","month":"10","day":"","src":"http://39.108.86.5/addons/images/test.png","sum":1,"content":"遇见","loveSum":5,"dialogSum":1},
+          {"year":"07","month":"10","day":"","src":"http://39.108.86.5/addons/images/test.png","sum":1,"content":"遇见","loveSum":5,"dialogSum":1},
+          {"year":"07","month":"10","day":"","src":"http://39.108.86.5/addons/images/test.png","sum":1,"content":"遇见","loveSum":5,"dialogSum":1}
+        ]*/
       }
     },
     created() {
@@ -78,7 +86,7 @@
       })
 
       //本地测试
-     /* this.axios.get('myself').then(res=>{
+      /*this.axios.get('myself').then(res=>{
         console.log(res.data);
         this.info=res.data.info;
         this.myself=res.data.myself;
@@ -111,7 +119,7 @@
   }
   .myself-top .myself-name{
     text-align: right;
-    font-size: .38rem;
+    font-size: .42rem;
   }
   .myself-top .myself-name img{
     width: .6rem;
@@ -119,7 +127,7 @@
   .top-content {
     margin-left: .3rem;
     margin-top: .2rem;
-    font-size: .33rem;
+    font-size: .38rem;
   }
   .top-content p {
     line-height: 3;
@@ -154,13 +162,18 @@
     margin-left: .2rem;
     height: 2.2rem;
     position: relative;
-    width: 2.5rem;
+    width: 1rem;
   }
   .myself-container li .myself-meet p:nth-child(1){
     position: absolute;
     top: .02rem;
     left: 0;
-    font-size: .48rem;
+    font-size: .42rem;
+    width: 1rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: .1rem;
   }
   .myself-container li .myself-meet p:nth-child(2){
     position: absolute;

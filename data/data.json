@@ -1,9 +1,9 @@
 {
   "address":[
-    {"name":"夏泡泡雪","src":"http://39.108.86.5/addons/images/info_test.png","content":"待跟进","time":"5分钟前","last":"最后活动"},
-    {"name":"夏泡泡雪","src":"http://39.108.86.5/addons/images/info_test.png","content":"待跟进","time":"5分钟前","last":"最后活动"},
-    {"name":"夏泡泡雪","src":"http://39.108.86.5/addons/images/info_test.png","content":"待跟进","time":"5分钟前","last":"最后活动"},
-    {"name":"夏泡泡雪","src":"http://39.108.86.5/addons/images/info_test.png","content":"待跟进","time":"2分钟前","last":"最后活动"}
+    {"id":"1","name":"夏泡泡雪","src":"http://39.108.86.5/addons/images/info_test.png","content":"待跟进","time":"5分钟前","last":"最后活动"},
+    {"id":"1","name":"夏泡泡雪","src":"http://39.108.86.5/addons/images/info_test.png","content":"待跟进","time":"5分钟前","last":"最后活动"},
+    {"id":"1","name":"夏泡泡雪","src":"http://39.108.86.5/addons/images/info_test.png","content":"待跟进","time":"5分钟前","last":"最后活动"},
+    {"id":"1","name":"夏泡泡雪","src":"http://39.108.86.5/addons/images/info_test.png","content":"待跟进","time":"2分钟前","last":"最后活动"}
   ],
   "work":[{
     "username":9,
@@ -95,7 +95,7 @@
       "image":"http://39.108.86.5/addons/images/code.png"
     },
     "myself":[
-      {"year":"07","month":"10","day":"","src":"http://39.108.86.5/addons/images/test.png","sum":1,"content":"遇见","loveSum":5,"dialogSum":1},
+      {"year":"07","month":"10","day":"","src":"http://39.108.86.5/addons/images/test.png","sum":1,"content":"深圳市微冠成信息技术有限公司是一家以移动互联网营销为核心的系统解决方案服务提供商。公司紧跟时代发展的步伐，在移动互联网的时代，微冠成致力于将线下销售终端与线上营销完美结合，实现企业向移动互联网转型升级的愿景和目标。","loveSum":5,"dialogSum":1},
       {"year":"07","month":"10","day":"","src":"http://39.108.86.5/addons/images/test.png","sum":1,"content":"遇见","loveSum":5,"dialogSum":1},
       {"year":"07","month":"10","day":"","src":"http://39.108.86.5/addons/images/test.png","sum":1,"content":"遇见","loveSum":5,"dialogSum":1},
       {"year":"07","month":"10","day":"","src":"http://39.108.86.5/addons/images/test.png","sum":1,"content":"遇见","loveSum":5,"dialogSum":1},

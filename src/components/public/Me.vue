@@ -4,6 +4,7 @@
       <div class="me-header">
           <div class="left">
             <img :src="info.src" alt="" @click="alertImage">
+            <!--<img src="@/assets/images/me_myself.png" alt="" @click="alertImage">-->
           </div>
           <router-link to='/me/card'>
           <div class="left me-info">
@@ -41,7 +42,8 @@
           {src:require('@/assets/images/me_myself.png'),content:'我的动态',router:"myself"},
           // {src:require('@/assets/images/me_talk.png'),content:'话术管理',router:"me"},
           {src:require('@/assets/images/me_use.png'),content:'使用教程',router:"me"},
-          {src:require('@/assets/images/me_ques.png'),content:'意见反馈',router:"suggest"},
+          {src:require('@/assets/images/me_ques.png'),content:'意见反馈',router:"confirmsuggest"},
+          {src:require('@/assets/images/me_poster.png'),content:'名片海报',router:"mePoster"},
           {src:require('@/assets/images/me_setting.png'),content:'设置',router:"me"},
         ],
         info:{
@@ -90,6 +92,8 @@
   }
   .me-header .left img {
     border-radius: .2rem;
+    width: 1.7rem;
+    height: 1.7rem;
   }
   .me-info p {
     font-size: .35rem;

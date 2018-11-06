@@ -10,10 +10,10 @@
         </div>
       </div>
       <!--<img style="margin: .5rem 0" src="@/assets/images/chart_test.png" alt="">-->
-      <Success :chartData="data.success"></Success>
       <Interest :chartData="data.interest"></Interest>
       <Active :chartData="data.active"></Active>
       <Action :chartData="data.action"></Action>
+      <Success :chartData="data.success"></Success>
     </div>
 </template>
 

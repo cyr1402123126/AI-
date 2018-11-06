@@ -82,7 +82,7 @@
       addOnce(val) {
         console.log(val.staff_id);
         if (!val.zanShow) {
-          val.rank++;
+          val.love++;
           val.zanShow=true;
           this.axios.post('rank_list.php?type=rank_list&token=e8cd78cfa5397595b796aa412e86f1dd&category=zan',{
             id:val.staff_id
@@ -99,6 +99,7 @@
   }
   .ApplyLine-img {
     width: 1.3rem;
+    height: 1.3rem;
   }
   .ApplyLine-img img {
     border-radius: 50%;

@@ -51,11 +51,6 @@ export default new Router({
         {path: '/work', name: 'work', component: Work,meta:{title:"工作"}},
         {path: '/me', name: 'me', component: Me,meta:{title:"我"}},
 
-        // 我的应用
-        {path:'/work/ai',name:'applyAI',component:ApplyAI,meta:{title:"AI报表"}},
-        {path:'/work/card',name:'applyCard',component:ApplyCard,meta:{title:"我的名片日报"}},
-        {path:'/work/line',name:'applyLine',component:ApplyLine,meta:{title:"排行榜"}},
-        {path:'/work/state',name:'applyState',component:ApplyState,meta:{title:"动态"}},
 
         //我的
         {path:'/me/myself',name:'myself',component:Myself,meta:{title:"我的动态"}},
@@ -77,18 +72,23 @@ export default new Router({
     //查看名片
     {path:'/behavior/lookCard',name:'lookCard',component:LookCard,meta:{title:"查看名片"}},
     //客户详情
-    {path:'/address/customerInfo',name:'customerInfo',component:CustomerInfo,meta:{title:"查看名片"}},
+    {path:'/address/:id',name:'customerInfo',component:CustomerInfo,meta:{title:"查看名片"}},
     {path:'/address/customerInfo/compile',name:'compile',component:Compile,meta:{title:"资料详情"}},
 
 
     //意见列表
     {path:'/me/suggest',name:'suggest',component:suggest,meta:{title:"意见反馈"}},
     //意见提交
-    {path:'/me/Confirmsuggest',name:'confirmsuggest',component:Confirmsuggest,meta:{title:"意见反馈"}},
+    {path:'/me/confirmsuggest',name:'confirmsuggest',component:Confirmsuggest,meta:{title:"意见反馈"}},
     //发布
     {path:'/work/edit',name:'edit',component:edit,meta:{title:"编辑"}},
 
     //聊天室
     {path:'/info/chat',name:'chat',component:Chat,meta:{title:"发送信息"}},
+    // 我的应用
+    {path:'/work/ai',name:'applyAI',component:ApplyAI,meta:{title:"AI报表"}},
+    {path:'/work/card',name:'applyCard',component:ApplyCard,meta:{title:"我的名片日报"}},
+    {path:'/work/line',name:'applyLine',component:ApplyLine,meta:{title:"排行榜"}},
+    {path:'/work/state',name:'applyState',component:ApplyState,meta:{title:"动态"}},
   ]
 })

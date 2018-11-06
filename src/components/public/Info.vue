@@ -19,7 +19,7 @@
     data() {
       return {
         info:[
-          /*{name:"夏泡泡雪",content:"在么",time:"下午16:28"},
+        /*  {name:"夏泡泡雪",content:"在么",time:"下午16:28"},
           {name:"夏泡泡雪",content:"在么",time:"下午16:28"},
           {name:"夏泡泡雪",content:"在么",time:"下午16:28"},
           {name:"夏泡泡雪",content:"在么",time:"下午16:28"},

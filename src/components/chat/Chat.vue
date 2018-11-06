@@ -97,7 +97,7 @@
         keyPng: keyPng,
         sendValue:'',
         arr:[
-          /* {name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好;#衰;',read:'未读',type:1},
+           /*{name:'陈某某',src:require("@/assets/images/logo.png"),content:'大家好;#衰;',read:'未读',type:1},
            {name:'陈鸿真',src:require('@/assets/images/logo.png'),content:'大家好',read:'未读',type:0},
            {name:'陈鸿真',src:require('@/assets/images/logo.png'),content:'大家好',read:'未读',type:0},
            {name:'陈鸿真',src:require('@/assets/images/logo.png'),content:'大家好',read:'未读',type:0},
@@ -205,7 +205,7 @@
           console.log(page);
           let staff_id=this.$route.params.staff_id;
           let customer_id=this.$route.params.customer_id;
-          this.axios.post('https://mp.wedotop.com/Api/message_log1.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
+          this.axios.post('https://mp.wedotop.com/Api/message_log.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
             page:page,
             staff_id:staff_id,
             customer_id:customer_id,
@@ -322,7 +322,7 @@
         console.log(file);
         let staff_id=this.$route.params.staff_id;
         let customer_id=this.$route.params.customer_id;
-        this.axios.post('https://mp.wedotop.com/Api/message_log1.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
+        this.axios.post('https://mp.wedotop.com/Api/message_log.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
           staff_id:staff_id,
           customer_id:customer_id,
           obj:2,
@@ -352,7 +352,7 @@
       getMessage(data) {
         let staff_id=this.$route.params.staff_id;
         let customer_id=this.$route.params.customer_id;
-        this.axios.post('https://mp.wedotop.com/Api/message_log1.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
+        this.axios.post('https://mp.wedotop.com/Api/message_log.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
           staff_id:staff_id,
           customer_id:customer_id,
           obj:2,

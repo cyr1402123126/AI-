@@ -14,7 +14,7 @@
     data() {
       return {
         list:[
-          {name:"选择名片样式",route:"meStyle"},
+          // {name:"选择名片样式",route:"meStyle"},
           {name:"名片基本信息",route:"meInfo"},
           {name:"名片海报",route:"mePoster"},
           {name:"个人简介/语音/标签/图片",route:"mePerson"},

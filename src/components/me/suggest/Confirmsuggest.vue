@@ -12,7 +12,7 @@
       </div>
       <div class="phone clearfix">
         <span class="phoneName">手机号码</span>
-        <input type="tel" name="iphone" id="iphone" placeholder="填写后方便我们与您联系" ref="phoneText">
+        <input type="number" name="iphone" id="iphone" placeholder="填写后方便我们与您联系" ref="phoneText">
       </div>
       <div class="detail clearfix">
         <span class="title">建议描述</span>

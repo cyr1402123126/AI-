@@ -57,8 +57,9 @@ else if (process.env.NODE_ENV == 'prodution') {
 
 
 axios.defaults.baseURL = 'https://mp.wedotop.com/Api/'
-// axios.defaults.baseURL = 'http://192.168.1.148/card/Api/'
 // axios.defaults.baseURL = 'http://localhost:3000/'
+// axios.defaults.baseURL = 'http://192.168.1.148/card/Api/'
+
 
 /* eslint-disable no-new */
 new Vue({
