@@ -16,6 +16,7 @@
       '$route':this.$route.params
     },*/
       created() {
+        this.$store.commit('getActive',0)
       // console.log(this.$route.params);
     }
   }

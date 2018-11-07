@@ -68,6 +68,9 @@
     },
     components:{
       MeCard
+    },
+    created() {
+      this.$store.commit('getActive',4)
     }
   }
 </script>

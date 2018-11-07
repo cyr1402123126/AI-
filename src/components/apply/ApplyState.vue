@@ -17,7 +17,7 @@
               <h3>{{ item.firstName }}</h3>
               <p>{{ item.desc }}</p>
               <div class="applyState-images">
-                <img  v-for="(value,index) in item.movingImg" :key="index" :src="value" alt="" @click="alertImage(value)">
+                <img  v-for="(value,index) in item.movingImg" :key="index" :src="value" alt="" @click="alertImage(item.movingImg,index)">
               </div>
               <div class="applyState-time clearfix">
                 <span class="left">{{ item.movingTime }}</span>
@@ -44,7 +44,7 @@
               <p>{{ item.desc }}</p>
               <div class="applyState-images clearfix spacily-gray">
                 <div class="left spacily-small">
-                  <img :src="item.companyImg" alt="" @click="alertImage(item.companyImg)">
+                  <img :src="item.companyImg" alt="" @click="alertImage(item.companyImg,0)">
                 </div>
                 <p class="left">{{ item.content }}</p>
               </div>
@@ -104,16 +104,15 @@
       }
     },
     created() {
-      let company_id=this.getCookie('company_id');
+      this.$store.commit('getActive',3)
       count=1;
-      this.axios.post('https://mp.wedotop.com/program/dynamic.php',{
+      this.axios.post('https://tc.wedotop.com/program/dynamic.php',{
         token : "c6187f4d45daabad829dabf49f167502",
         type : "dynamic",
         category : "list",
         company_id : 1
       }).then(res=>{
         this.state=res.data;
-        console.log(res.data);
       })
     },
     components :{
@@ -130,7 +129,7 @@
           setTimeout(() => {
             const arr = [];
             count++;
-            this.axios.post('https://mp.wedotop.com/program/dynamic.php',{
+            this.axios.post('https://tc.wedotop.com/program/dynamic.php',{
               token : "c6187f4d45daabad829dabf49f167502",
               type : "dynamic",
               category : "list",
@@ -161,12 +160,12 @@
           }
         })
       },
-      alertImage(img) {
+      alertImage(img,index) {
+        console.log(img);
         ImagePreview({
-          images: [
-            img
-          ],
-          showIndex: false
+          images: img,
+          showIndex: false,
+          startPosition:index
         });
       }
     }

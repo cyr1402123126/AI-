@@ -55,8 +55,23 @@ else if (process.env.NODE_ENV == 'prodution') {
 }
 // Vue.prototype.baseURL = process.env.API_ROOT;*/
 
+if (process.env.NODE_ENV === 'development') {
+  // axios.defaults.baseURL = 'https://tc.wedotop.com/Api/'
+  // axios.defaults.baseURL = 'https://mp.wedotop.com/Api/'
+  axios.defaults.baseURL = '/api'
+// 编译环境
+} else {
+  // 测试环境
+  if (process.env.type === 'test') {
+    axios.defaults.baseURL = 'https://tc.wedotop.com/Api/'
+    // 正式环境
+  } else {
+    axios.defaults.baseURL = 'https://tc.wedotop.com/Api/'
+  }
+}
 
-axios.defaults.baseURL = 'https://mp.wedotop.com/Api/'
+
+// axios.defaults.baseURL = 'https://mp.wedotop.com/Api/'
 // axios.defaults.baseURL = 'http://localhost:3000/'
 // axios.defaults.baseURL = 'http://192.168.1.148/card/Api/'
 

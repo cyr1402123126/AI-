@@ -66,6 +66,7 @@
       }
     },
     created() {
+      this.$store.commit('getActive',4)
       this.axios.get('me.php?type=me&token=93981fd7cbba909dcc92363173af8a17').then(res=>{
       // this.axios.get('me').then(res=>{
         this.info=res.data[0];

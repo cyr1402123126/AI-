@@ -255,8 +255,9 @@
       }
     },
     created() {
+      this.$store.commit('getActive',2)
       let staff_id=this.getCookie('staff_id');
-      this.axios.post('https://mp.wedotop.com/Api/customer_detail.php',{
+      this.axios.post('customer_detail.php',{
         token : "af79028c6574ed3b6359b74ab0112796",
         type : "customer_detail",
         staff_id : staff_id,

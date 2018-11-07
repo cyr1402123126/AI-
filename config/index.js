@@ -10,7 +10,15 @@ module.exports = {
     // Paths
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
-    proxyTable: {},
+    proxyTable: {
+      '/api': {
+        target: 'http://192.168.1.149:53000/',// 需要代理的地址
+        changeOrigin: true,
+        pathRewrite: {
+          '^/api': '/' // 这里理解成用‘/api’代替 target 里面的地址，调取接口时直接用 /api 代替
+        }
+      }
+    },
 
     // Various Dev Server settings
     host: '192.168.1.149', // can be overwritten by process.env.HOST

@@ -70,6 +70,7 @@
       }
     },
     created() {
+      this.$store.commit('getActive',3)
       this.axios.get('rank_list.php?type=rank_list&token=e8cd78cfa5397595b796aa412e86f1dd&category=list')
       // this.axios.get('line')
         .then(res=>{

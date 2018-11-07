@@ -58,6 +58,7 @@
       mycardInfo,
     },
     created() {
+      this.$store.commit('getActive',4)
       this.axios.get('card.php?type=card&token=fd51130bbed844e007c6a8e252312869').then(res=>{
       // this.axios.get('info').then(res=>{
         // let code=res.data

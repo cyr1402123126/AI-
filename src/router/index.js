@@ -54,14 +54,7 @@ export default new Router({
 
         //我的
         {path:'/me/myself',name:'myself',component:Myself,meta:{title:"我的动态"}},
-        {path:'/me/card',name:'card',component:Card,meta:{title:"我的名片"}},
 
-        //编辑名片
-        {path:'/me/list',name:'list',component:List,meta:{title:"编辑名片"}},
-        {path:'/me/list/meInfo',name:'meInfo',component:MeInfo,meta:{title:"编辑基本信息"}},
-        {path:'/me/list/mePoster',name:'mePoster',component:MePoster,meta:{title:"名片海报"}},
-        {path:'/me/list/meStyle',name:'meStyle',component:MeStyle,meta:{title:"名片样式"}},
-        {path:'/me/list/meVedio',name:'meVedio',component:MeVedio,meta:{title:"视频"}},
       ]},
     // {path:'/',name:'meVedio',component:List,meta:{title:"视频"}},
     {path:'/me/list/mePerson',name:'mePerson',component:MePerson,meta:{title:"编辑名片"}},
@@ -84,11 +77,19 @@ export default new Router({
     {path:'/work/edit',name:'edit',component:edit,meta:{title:"编辑"}},
 
     //聊天室
-    {path:'/info/chat',name:'chat',component:Chat,meta:{title:"发送信息"}},
+    {path:'/info/:staff_id/:customer_id',name:'chat',component:Chat,meta:{title:"发送信息"}},
     // 我的应用
     {path:'/work/ai',name:'applyAI',component:ApplyAI,meta:{title:"AI报表"}},
     {path:'/work/card',name:'applyCard',component:ApplyCard,meta:{title:"我的名片日报"}},
     {path:'/work/line',name:'applyLine',component:ApplyLine,meta:{title:"排行榜"}},
     {path:'/work/state',name:'applyState',component:ApplyState,meta:{title:"动态"}},
+
+    //编辑名片
+    {path:'/me/list',name:'list',component:List,meta:{title:"编辑名片"}},
+    {path:'/me/list/meInfo',name:'meInfo',component:MeInfo,meta:{title:"编辑基本信息"}},
+    {path:'/me/list/mePoster',name:'mePoster',component:MePoster,meta:{title:"名片海报"}},
+    {path:'/me/list/meStyle',name:'meStyle',component:MeStyle,meta:{title:"名片样式"}},
+    {path:'/me/list/meVedio',name:'meVedio',component:MeVedio,meta:{title:"视频"}},
+    {path:'/me/card',name:'card',component:Card,meta:{title:"我的名片"}},
   ]
 })

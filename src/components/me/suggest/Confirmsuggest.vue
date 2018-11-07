@@ -123,6 +123,9 @@
         this.company_id = this.getCookie('company_id');
         this.staff_id = this.getCookie('staff_id');
       },
+    created() {
+      this.$store.commit('getActive',4)
+    },
       computeds:{
         confineLength(){
           (this.textValue.length>500) ? this.textValue = this.textValue.slice(0, 500):'';
@@ -215,7 +218,7 @@
           if(( this.stateValue.length==0&&this.$refs.sugText.value.length==0&&this.$refs.phoneText.value.length==0)){
             Toast('请输入您的建议和手机号和问题类型');
           }else{
-            this.axios.post('https://mp.wedotop.com/Api/feedback.php',{
+            this.axios.post('feedback.php',{
               type: 'feedback',
               token: token,
               back_type:back_type,

@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "webpack-dev-server --inline --progress --config build/webpack.dev.conf.js",
-    "mock": "json-server data/data.json --watch",
+    "mock": "json-server --watch --port 53000 --host 192.168.1.149 data/data.json",
     "start": "npm run dev",
     "build": "node build/build.js"
   },

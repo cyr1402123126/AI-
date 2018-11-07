@@ -63,7 +63,7 @@
           }
         }
     },
-    created() {
+    mounted() {
       this.active=this.$store.state.active
     },
     methods:{
@@ -124,6 +124,7 @@
       '$route': 'routerChange'
     }
   }
+
 </script>
 
 <style scoped>
@@ -131,5 +132,8 @@
     height: 18px;
     display: block;
     width: .55rem;
+  }
+  .van-tabbar--fixed {
+    z-index: 10000!important;
   }
 </style>

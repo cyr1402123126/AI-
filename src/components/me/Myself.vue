@@ -73,6 +73,7 @@
       }
     },
     created() {
+      this.$store.commit('getActive',4)
       //线上环境
       let staff_id=this.getCookie('staff_id');
       this.axios.post('dynamic.php',{
@@ -86,7 +87,7 @@
       })
 
       //本地测试
-      /*this.axios.get('myself').then(res=>{
+      /*this.axios.post('dynamic.php').then(res=>{
         console.log(res.data);
         this.info=res.data.info;
         this.myself=res.data.myself;

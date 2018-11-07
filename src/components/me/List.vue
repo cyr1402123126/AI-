@@ -21,6 +21,9 @@
           {name:"视频",route:"meVedio"},
         ]
       }
+    },
+    created() {
+      this.$store.commit('getActive',4)
     }
   }
 </script>

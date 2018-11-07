@@ -1,11 +1,11 @@
 <template>
   <div>
-    <Footer></Footer>
     <transition name="Opacity" mode="out-in">
       <keep-alive>
         <router-view style="margin-bottom: 60px"></router-view>
       </keep-alive>
     </transition>
+    <Footer></Footer>
   </div>
 </template>
 

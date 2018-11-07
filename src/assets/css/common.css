@@ -72,3 +72,6 @@ img {
 .van-tabbar-item__icon {
   margin-bottom: 8px;
 }
+.van-image-preview__index {
+  display: none;
+}

@@ -14,6 +14,21 @@
         7天内被查看的行为统计
         <span class="right" @click="getAlert()"><img src="@/assets/images/calendar.png" alt=""></span>
       </p>-->
+      <div class="person-container">
+        <ul>
+          <li class="clearfix" v-for="(item,index) in Statistics" :key="index">
+            <div class="left"><img :src="item.src" alt=""></div>
+            <div class="left content">
+              <p>{{ item.name }}</p>
+              <p>跟你在名片上互动了<span>{{ item.times }}</span>次</p>
+            </div>
+            <div class="right">
+              <p>{{ item.line }}</p>
+              <p>{{ item.honor }}</p>
+            </div>
+          </li>
+        </ul>
+      </div>
       <ul>
         <li @click="change(item,$event)" v-for="item in type" :key="item.sum"><img :src="item.src" alt=""> <span>{{ item.name }}</span>跟你在名片上互动了<span>{{item.time}}</span>次<span class="span"><img
           src="@/assets/images/more_bottom.png" class="arrow" alt=""></span>
@@ -77,6 +92,11 @@
           {"name":"猫和老鼠","src":require('@/assets/images/logo.png'),"show":false,"time":"17","look":[{"type":"名片","lasttime":"8"},{"type":"官网","lasttime":"8"},{"type":"商城","lasttime":"8"}]},
           {"name":"猫和老鼠","src":require('@/assets/images/logo.png'),"show":false,"time":"17","look":[{"type":"名片","lasttime":"8"},{"type":"官网","lasttime":"8"},{"type":"商城","lasttime":"8"}]},*/
         ],
+        Statistics:[
+         /* {"src":require("@/assets/images/logo.png"),"name":"科比","times":"75","line":"1","honor":"拔得头筹"},
+          {"src":require("@/assets/images/logo.png"),"name":"科比","times":"75","line":"2","honor":"攻克堡垒"},
+          {"src":require("@/assets/images/logo.png"),"name":"科比","times":"75","line":"3","honor":"成交在望"}*/
+        ],
         flag:true,
         flag1:false,
         currentDate: new Date(),
@@ -89,10 +109,11 @@
       }
     },
     created() {
-      this.axios.get('action.php?type=person&token=ac2abf57d3252c2a167f2c7d103d1eeb').then(res=>{
-      // this.axios.get('type').then(res=>{
+      this.$store.commit('getActive',0)
+      this.axios.get('action_person.php?type=person&token=ac2abf57d3252c2a167f2c7d103d1eeb').then(res=>{
         console.log(res.data);
-        this.type=res.data;
+        this.type=res.data.type;
+        this.Statistics=res.data.Statistics;
       })
     },
     components:{
@@ -212,5 +233,45 @@
   }
   .rader-li span {
     margin: 0 .2rem;
+  }
+  .person-container {
+    color: #696969;
+    background: #fff;
+    margin-bottom: .6rem;
+    border: 1px solid #f3f3f3;
+    box-shadow:-.12rem .12rem .1rem rgba(0,0,0,.03);
+    padding: .5rem .3rem;
+    box-sizing: border-box;
+  }
+  .person-container ul {
+    border: none;
+  }
+  .person-container ul>li {
+    border: none;
+    line-height: 1.5;
+    margin-bottom: .6rem;
+  }
+  .person-container ul>li:last-child {
+    margin-bottom:.1rem;
+  }
+  .person-container li .right {
+    text-align: center;
+    font-size: .32rem;
+    line-height: .7rem;
+  }
+  .person-container li .right p:nth-child(1) {
+    color: #f39800;
+    font-size: .72rem;
+  }
+  .person-container li .content {
+    font-size: .38rem;
+  }
+  .person-container li .content p:nth-child(1) {
+    color: #3e84ff;
+    font-size: .42rem;
+  }
+  .person-container li .content span{
+    margin: 0 .1rem;
+    font-size: .41rem;
   }
 </style>

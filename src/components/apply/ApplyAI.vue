@@ -189,7 +189,8 @@
       AIData
     },
     created() {
-      this.axios.post('https://mp.wedotop.com/Api/report.php',{
+      this.$store.commit('getActive',3)
+      this.axios.post('report.php',{
         type : "report",
         token : "cf2b3ffc3a4dac37c1f08c7820f54138",
       }).then(res=>{

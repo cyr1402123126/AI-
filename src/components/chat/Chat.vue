@@ -175,9 +175,10 @@
 
     },
     created() {
+      this.$store.commit('getActive',1)
       let staff_id=this.$route.params.staff_id;
       let customer_id=this.$route.params.customer_id;
-      this.axios.post('https://mp.wedotop.com/Api/message_log.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
+      this.axios.post('message_log.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
         staff_id:staff_id,
         customer_id:customer_id,
         obj:2
@@ -205,7 +206,7 @@
           console.log(page);
           let staff_id=this.$route.params.staff_id;
           let customer_id=this.$route.params.customer_id;
-          this.axios.post('https://mp.wedotop.com/Api/message_log.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
+          this.axios.post('message_log.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
             page:page,
             staff_id:staff_id,
             customer_id:customer_id,
@@ -313,6 +314,7 @@
         this.count++;
       },
       handleEmotion (i) {
+        this.changeEmotion()
         this.content += i;
         this.flag=this.content==''?true:false;
       },
@@ -322,7 +324,7 @@
         console.log(file);
         let staff_id=this.$route.params.staff_id;
         let customer_id=this.$route.params.customer_id;
-        this.axios.post('https://mp.wedotop.com/Api/message_log.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
+        this.axios.post('message_log.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
           staff_id:staff_id,
           customer_id:customer_id,
           obj:2,
@@ -352,7 +354,7 @@
       getMessage(data) {
         let staff_id=this.$route.params.staff_id;
         let customer_id=this.$route.params.customer_id;
-        this.axios.post('https://mp.wedotop.com/Api/message_log.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
+        this.axios.post('message_log.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
           staff_id:staff_id,
           customer_id:customer_id,
           obj:2,

@@ -22,6 +22,9 @@
     components:{
       SelectTime,
       Info
+    },
+    created() {
+      this.$store.commit('getActive',0)
     }
   }
 </script>

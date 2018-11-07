@@ -106,6 +106,7 @@
       },
     },
     created() {
+      this.$store.commit('getActive',3)
       this.axios.get('work.php?type=work&token=9aaed6a7b5d34ee670804d8a69c093f6').then(res=>{
       // this.axios.get('work').then(res=>{
         this.data=res.data[0];

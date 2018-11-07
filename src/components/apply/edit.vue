@@ -16,7 +16,7 @@
               </div>
             </li>
             <li>
-              <van-uploader :after-read="onRead"  multiple v-if="!(myImgs.length>=9)">
+              <van-uploader :after-read="onRead"  accept="image/gif,image/jpeg,image/jpg,image/png" v-if="!(myImgs.length>=9)">
                 <img src="@/assets/images/sugAdd.png" alt="添加图片" title="添加图片" class="addPic">
               </van-uploader>
             </li>
@@ -24,7 +24,7 @@
         </div>
       </section>
       <footer class="issues">
-        <div class="publish" @click="publish">发布</div>
+        <div class="publish" @click="isClick && publish()">发布</div>
         <div class="cancel" @click="cancel">取消</div>
       </footer>
       <van-loading  color="white" id="loading" v-if="loadShow"/>
@@ -40,7 +40,8 @@
           loadShow: false,
           myImgs:[],
           textValue:'',
-          placeholderValue:'说点什么好吧...'
+          placeholderValue:'说点什么好吧...',
+          isClick:true
         }
       },
       watch:{
@@ -70,18 +71,13 @@
           this.myImgs.splice(index,1)
         },
         publish(){
-          // let company_id=getCookie('company_id',res.data[0].company_id);
-          // let staff_id=getCookie('staff_id',res.data[0].staff_id);
-          console.log(this.myImgs);
-          console.log(this.textValue);
-
           if(this.myImgs.length==0){
             Dialog.alert({
               message: '必须上传一张图片哦'
             }).then(() => {
             });
           }else{
-            this.axios.post('https://mp.wedotop.com/Api/dynamic.php',{
+            this.axios.post('dynamic.php',{
               type: 'dynamic',
               token: 'c6187f4d45daabad829dabf49f167502',
               back_type:'dynamic',
@@ -99,6 +95,7 @@
               Toast('发布失败');
               console.log(fail,'失败')
             });
+            this.isClick=false;
           }
 
         },

@@ -30,8 +30,9 @@
       }
     },
     created() {
+      this.$store.commit('getActive',1)
       let staff_id=this.getCookie('staff_id');
-      this.axios.post('https://mp.wedotop.com/Api/message.php?type=message&token=d09abebb9f5a9ec1dc6f16d55559154a',{
+      /*this.axios.post('message.php?type=message&token=d09abebb9f5a9ec1dc6f16d55559154a',{
         staff_id:staff_id,
         customer_id:84,
       }).then(res=>{
@@ -39,7 +40,14 @@
         this.info=res.data;
         this.$store.commit('getStaff_id',res.data.staff_id);
         this.$store.commit('getCustomer_id',res.data.customer_id);
-        })
+      })*/
+      this.axios.get('message.php?type=message&token=d09abebb9f5a9ec1dc6f16d55559154a')
+        .then(res=>{
+        console.log(res.data);
+        this.info=res.data;
+        this.$store.commit('getStaff_id',res.data.staff_id);
+        this.$store.commit('getCustomer_id',res.data.customer_id);
+      })
     }
   }
 </script>

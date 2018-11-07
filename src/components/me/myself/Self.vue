@@ -133,7 +133,7 @@
         this.state.map(item => {
           index > -1 ? item['comment'].splice(index, 1) : ''
         })
-        this.axios.post('https://mp.wedotop.com/Api/dynamic_detail.php',{
+        this.axios.post('dynamic_detail.php',{
           token: "a3d529d5085ef093cd36dc4cae09d599",
           type: "detail",
           category: "del_comment",
@@ -186,7 +186,7 @@
           var replyItemId = that.replyItem.id;
           console.log("comment_id---"+commentValue);
           console.log("content---"+replyItemId);
-          this.axios.post('https://mp.wedotop.com/Api/dynamic_detail.php',{
+          this.axios.post('dynamic_detail.php',{
             token:"a3d529d5085ef093cd36dc4cae09d599",
             type:"detail",
             category:"reply",
@@ -217,6 +217,7 @@
       }
     },
     created(){
+      this.$store.commit('getActive',4)
       window.addEventListener('contextmenu', function(e){
         e.preventDefault();
       });

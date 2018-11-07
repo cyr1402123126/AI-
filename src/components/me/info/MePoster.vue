@@ -35,7 +35,8 @@
       MeCard
     },
     created() {
-      this.axios.get('https://mp.wedotop.com/Api/card.php?type=card&token=fd51130bbed844e007c6a8e252312869')
+      this.$store.commit('getActive',4)
+      this.axios.get('card.php?type=card&token=fd51130bbed844e007c6a8e252312869')
       // this.axios.get('mePoster')
         .then(res=>{
           this.cardInfo=res.data[0].cardInfo;

@@ -39,9 +39,9 @@
     <div class="myTag">
       <div class="mainTop clearfix">
         <div class="tiTle">我的标签</div>
-        <div class="tagNumber">4/10</div>
+        <div class="tagNumber">{{ myTag.length }}/10</div>
       </div>
-      <section class="main clearfix" >
+      <section class="main clearfix">
           <span class="tag" v-for="(item,index) in myTag" :key="index">
             {{item}}
             <img class="close" src="@/assets/images/me_close.png" alt="" @click="deleteTag(index)">
@@ -109,7 +109,7 @@
       return {
         autoIntro: "",
         myTag:[],
-        consultTag:[],
+        consultTag:['诚信至上','豪爽耿直','广交朋友','原则性强','互联网创业者','有俩把刷子','温暖的小太阳','小奶猫'],
         // myImages:[require("@/assets/images/test.png"),require("@/assets/images/test.png"),require("@/assets/images/test.png"),],
         myImages:[],
         username:'',
@@ -123,13 +123,14 @@
     },
     name: "MePerson",
     created() {
+      this.$store.commit('getActive',4)
       this.axios.get('synopsis.php?type=brief&token=39c9b3340883c3b37bb7c9b21d45e44a')
       // this.axios.get('mePerson')
         .then(res=>{
           let data=res.data;
           this.textarea=data.autoIntro;
           this.myTag=data.myTag;
-          this.consultTag=data.consultTag;
+          // this.consultTag=data.consultTag;
           this.myImages=data.myImages;
           this.myTitleImage=data.cover;
           console.log(data);
@@ -179,7 +180,11 @@
         this.show=true;
       },
       pushTag(e) {
-        this.myTag.push(e.target.innerText)
+        if (this.myTag.length < 10) {
+          this.myTag.push(e.target.innerText);
+        }else {
+          this.$toast('不能超过10个标签')
+        }
       },
       beforeClose(action, done) {
         if (action === 'confirm') {
@@ -193,7 +198,11 @@
         this.show=false;
       },
       confirm() {
-        this.myTag.push(this.username)
+        if (this.myTag.length<10) {
+          this.myTag.push(this.username);
+        }else {
+          this.$toast('不能超过10个标签')
+        }
         this.show=false;
       },
       save() {
@@ -208,7 +217,7 @@
           myImages:this.myImages,
           cover:this.myTitleImage
         };
-        this.axios.post('https://mp.wedotop.com/Api/synopsis.php?type=synopsis&token=fbf2bd46c700b4d98b2c4b3633b40844',data,)
+        this.axios.post('synopsis.php?type=synopsis&token=fbf2bd46c700b4d98b2c4b3633b40844',data)
           .then(res=>{
             Toast('保存成功');
             this.$router.push('/me/list')

@@ -92,13 +92,11 @@
       }
     },
     created() {
+      this.$store.commit('getActive',2)
+      // this.axios.get('address.php?type=address&token=2df885165ebea246edd089ddbd69af8c')
       this.axios.get('address.php?type=address&token=2df885165ebea246edd089ddbd69af8c')
-      // this.axios.get('http://localhost:3000/address')
         .then(res=>{
           console.log(res);
-          // this.address=res.data;
-          // this.count=res.count;
-
           this.address=res.data.data;
           this.count=res.data.count;
         })

@@ -35,6 +35,9 @@
       close() {
         this.flag=true
       }
+    },
+    created() {
+      this.$store.commit('getActive',4)
     }
   }
 </script>

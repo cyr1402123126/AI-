@@ -141,7 +141,8 @@
       }
     },
     created() {
-      this.axios.get('https://mp.wedotop.com/Api/paper.php?type=paper&token=e0bc95d9445836ae05679203a9b8fe3e')
+      this.$store.commit('getActive',3)
+      this.axios.get('paper.php?type=paper&token=e0bc95d9445836ae05679203a9b8fe3e')
         .then(res=>{
           this.myPaper=res.data[0];
           // console.log(res.data[0]);
@@ -158,7 +159,7 @@
       confirm(val) {
         this.myPaper.time=this.getValue==undefined?this.myPaper.time:this.getValue.join('-');
         console.log(this.myPaper.time);
-        this.axios.get('https://mp.wedotop.com/Api/paper.php?type=paper&token=e0bc95d9445836ae05679203a9b8fe3e&time='+this.myPaper.time)
+        this.axios.get('paper.php?type=paper&token=e0bc95d9445836ae05679203a9b8fe3e&time='+this.myPaper.time)
           .then(res=>{
             this.myPaper=res.data[0];
             console.log(res.data);
