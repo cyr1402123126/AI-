@@ -54,6 +54,7 @@
       },
       methods:{
         onRead(file){
+          alert(1)
           this.myImgs.push(file.content);
         },
         getData(){
@@ -77,6 +78,10 @@
             }).then(() => {
             });
           }else{
+            this.$toast.loading({
+              mask: true,
+              message: '加载中...'
+            });
             this.axios.post('dynamic.php',{
               type: 'dynamic',
               token: 'c6187f4d45daabad829dabf49f167502',
@@ -87,9 +92,8 @@
               staff_id: 1,
               company_id: 1
             }).then(res=>{
-              console.log(res,'成功')
-              console.log(res);
               Toast('发布成功');
+              // this.$toast.clear();
               this.$router.go(-1);
             }).catch(fail=>{
               Toast('发布失败');
@@ -165,7 +169,7 @@
             height: 2.2rem;
           }
           div.close{
-            z-index: 999;
+            /*z-index: 999;*/
             position: absolute;
             right: -.25rem;
             top: -.25rem;
@@ -188,7 +192,7 @@
       }
     }
     footer.issues{
-      z-index: 99999;
+      /*z-index: 99999;*/
       position: fixed;
       left: 0;
       width: 100%;
