@@ -9,36 +9,45 @@
       </ul>
     </div>
     <div class="rader-day">
-      <SelectTime></SelectTime>
-      <!--<p class="clearfix">
-        7天内被查看的行为统计
-        <span class="right" @click="getAlert()"><img src="@/assets/images/calendar.png" alt=""></span>
-      </p>-->
-      <div class="person-container">
+      <vue-better-scroll
+        style="height:76vh;"
+        class="wrapper"
+        ref="scroll"
+        :scrollbar="scrollbarObj"
+        :pullUpLoad="pullUpLoadObj"
+        :startY="parseInt(startY)"
+        @pullingUp="onPullingUp">
+        <!--<SelectTime></SelectTime>-->
+        <!--<p class="clearfix">
+          7天内被查看的行为统计
+          <span class="right" @click="getAlert()"><img src="@/assets/images/calendar.png" alt=""></span>
+        </p>-->
+        <div class="person-container">
+          <ul>
+            <li class="clearfix" v-for="(item,index) in Statistics" :key="index">
+              <div class="left"><img :src="item.src" alt=""></div>
+              <div class="left content">
+                <p>{{ item.name }}</p>
+                <p>跟你在名片上互动了<span>{{ item.time }}</span>次</p>
+              </div>
+              <div class="right">
+                <p>{{ item.line }}</p>
+                <p>{{ item.honor }}</p>
+              </div>
+            </li>
+          </ul>
+        </div>
         <ul>
-          <li class="clearfix" v-for="(item,index) in Statistics" :key="index">
-            <div class="left"><img :src="item.src" alt=""></div>
-            <div class="left content">
-              <p>{{ item.name }}</p>
-              <p>跟你在名片上互动了<span>{{ item.times }}</span>次</p>
-            </div>
-            <div class="right">
-              <p>{{ item.line }}</p>
-              <p>{{ item.honor }}</p>
+          <li @click="change(item,$event)" v-for="item in type" :key="item.sum"><img :src="item.src" alt=""> <span>{{ item.name }}</span>跟你在名片上互动了<span>{{item.time}}</span>次<span class="span"><img
+            src="@/assets/images/more_bottom.png" class="arrow" alt=""></span>
+            <div class="rader-ul" v-if="item.show">
+              <div class="rader-li"  v-for="value in item.look" :key="type.lasttime">
+                查看了你的{{ value.type }}<span>{{ value.lasttime }}</span>次
+              </div>
             </div>
           </li>
         </ul>
-      </div>
-      <ul>
-        <li @click="change(item,$event)" v-for="item in type" :key="item.sum"><img :src="item.src" alt=""> <span>{{ item.name }}</span>跟你在名片上互动了<span>{{item.time}}</span>次<span class="span"><img
-          src="@/assets/images/more_bottom.png" class="arrow" alt=""></span>
-          <div class="rader-ul" v-if="item.show">
-            <div class="rader-li"  v-for="value in item.look" :key="type.lasttime">
-              查看了你的{{ value.type }}<span>{{ value.lasttime }}</span>次
-            </div>
-          </div>
-        </li>
-      </ul>
+      </vue-better-scroll>
     </div>
 
     <!--弹出框-->
@@ -77,6 +86,8 @@
 
 <script>
   import SelectTime from '@/components/template/SelectTime'
+  import VueBetterScroll from 'vue2-better-scroll'
+  let count = 1;
   export default {
     name: "Person",
     data(){
@@ -105,7 +116,25 @@
         startTime: '',
         endTime: '',
         show: false,
-        count:true
+        count:true,
+
+        // 这个配置可以开启滚动条，默认为 false。当设置为 true 或者是一个 Object 的时候，都会开启滚动条，默认是会 fade 的
+        scrollbarObj: {
+          fade: true
+        },
+        // 这个配置用于做上拉加载功能，默认为 false。当设置为 true 或者是一个 Object 的时候，可以开启上拉加载，可以配置离底部距离阈值（threshold）来决定开始加载的时机
+        pullUpLoadObj: {
+          threshold: 0,
+          txt: {
+            more: ' ',
+            noMore: '没有更多数据了'
+          }
+        },
+        startY: 0,  // 纵轴方向初始化位置
+        scrollToX: 0,
+        scrollToY: 0,
+        scrollToTime: 700,
+        items: []
       }
     },
     created() {
@@ -118,6 +147,7 @@
     },
     components:{
       SelectTime,
+      VueBetterScroll
     },
     methods:{
       getAlert() {
@@ -162,19 +192,72 @@
       getEnd() {
         this.show=true;
         this.count=false;
-      }
+      },
+      // 滚动到页面顶部
+      scrollTo () {
+        this.$refs.scroll.scrollTo(this.scrollToX, this.scrollToY, this.scrollToTime)
+      },
+      // 模拟数据请求
+      getData () {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            const arr = [];
+            count++;
+            console.log(count);
+            this.axios.post('action_person.php?type=person&token=ac2abf57d3252c2a167f2c7d103d1eeb',{
+              page:count
+            }).then(res=>{
+              console.log(res.data.type);
+              console.log(res.data.length);
+              let length=res.data.type.length;
+              if (res.data.type.length == 0) {
+                this.$toast('无更多数据')
+              }
+              for (let i = 0; i < length; i++) {
+                this.type.push(res.data.type[i])
+              }
+              // console.log(this.introduce);
+              resolve(arr)
+            })
+          }, 1000)
+        })
+      },
+      onPullingUp () {
+        // 模拟上拉 加载更多数据
+        console.log('上拉加载')
+        this.getData().then(res => {
+          this.items = this.items.concat(res)
+          if(count<50){
+            this.$refs.scroll.forceUpdate(true)
+          }else{
+            this.$refs.scroll.forceUpdate(false)
+          }
+        })
+      },
     }
   }
 </script>
 
 <style scoped>
   .rader-container {
-    padding: .4rem .5rem;
+    padding: .0rem .5rem;
+  }
+  .rader-container .title {
+    width: 91%;
+    height: 1.7rem;
+    line-height: 1rem;
+    background: #fff;
+    position: fixed;
+    z-index: 2;
+    top: 0;
   }
   .rader-container .title ul {
     width: 100%;
     height: 1rem;
     line-height: 1rem;
+    padding-top: .4rem;
+    background: #fff;
+    margin-bottom: -.24rem;
   }
   .rader-container .title li {
     width: 33.3%;
@@ -242,6 +325,7 @@
     box-shadow:-.12rem .12rem .1rem rgba(0,0,0,.03);
     padding: .5rem .3rem;
     box-sizing: border-box;
+    margin-top: 2rem;
   }
   .person-container ul {
     border: none;

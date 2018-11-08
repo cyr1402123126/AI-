@@ -9,7 +9,7 @@ import 'vant/lib/vant-css/index.css';
 import './assets/css/common.css'
 import axios from 'axios'
 import VueAxios from 'vue-axios'
-import { Lazyload } from 'vant';
+import { Lazyload,Toast } from 'vant';
 import qs from 'qs';
 import Vuex from 'vuex'
 import { store } from './store/store'
@@ -25,9 +25,35 @@ axios.interceptors.request.use( (config) => {
   return Promise.reject(error);
 });
 
+/*axios.interceptors.request.use( (config) => {
+  if (config.method=="post"){
+    config.data = qs.stringify(config.data);
+    config.headers['Content-Type'] = 'application/x-www-form-urlencoded';
+  }
+  loading=Toast.loading({
+    mask: false,
+    message: '加载中...'
+  });
+  // Toast.clear()
+  return config;
+},  (error) => {
+  loading.close()
+  Toast.fail('加载超时');
+  return Promise.reject(error);
+});
+// http响应拦截器
+axios.interceptors.response.use(data => {// 响应成功关闭loading
+  loading.close()
+  return data
+}, error => {
+  loading.close()
+  Toast.fail('加载失败');
+  return Promise.reject(error)
+})*/
+
 Vue.use(Vant);
 Vue.use(VueAxios,axios)
-Vue.use(Lazyload);
+Vue.use(Lazyload,Toast);
 Vue.use(Vuex)
 Vue.use(autosize);
 
@@ -56,9 +82,9 @@ else if (process.env.NODE_ENV == 'prodution') {
 // Vue.prototype.baseURL = process.env.API_ROOT;*/
 
 if (process.env.NODE_ENV === 'development') {
+  axios.defaults.baseURL = 'https://mp.wedotop.com/Api/'
   // axios.defaults.baseURL = 'https://tc.wedotop.com/Api/'
-  // axios.defaults.baseURL = 'https://mp.wedotop.com/Api/'
-  axios.defaults.baseURL = '/api'
+  // axios.defaults.baseURL = '/api'
 // 编译环境
 } else {
   // 测试环境

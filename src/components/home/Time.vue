@@ -7,49 +7,46 @@
         <li><router-link :to="{name:'behavior'}">地利</router-link></li>
         <li><router-link :to="{name:'person'}">人和</router-link></li>
       </ul>
+      <SelectTime :active="active" @showTime="showTime"></SelectTime>
     </div>
-    <SelectTime></SelectTime>
-
-    <!--标题-->
-    <div class="time-container">
-      <div class="left-box">
-        <p>{{ Statistics.leftSum }}</p>
-        <p>个访客</p>
-      </div>
-      <div class="right-box">
-        <ul>
-          <li>查看了你的商品<span>{{ Statistics.rightSum[0] }}</span>次</li>
-          <li>查看了你的名片<span>{{ Statistics.rightSum[1] }}</span>次</li>
-          <li>查看了你的官网<span>{{ Statistics.rightSum[2] }}</span>次</li>
-        </ul>
-      </div>
-    </div>
-    <!--内容-->
-    <Info :introduce="introduce"></Info>
-<!--    <div class="introduce" v-for="(item,index) in introduce" :key="index">
-      &lt;!&ndash;<router-link :to="{name:'homeInfo',params:{userId:index}}">&ndash;&gt;
-        <h3>{{ item.day }}<span>{{ item.time }}</span></h3>
-        <div class="introduce-box">
-          <div class="clearfix">
-            <div class="img left">
-              <img :src="item.src" alt="">
-            </div>
-            <span class="left">{{ item.name }}</span>
-          </div>
-          <p>{{ item.action }}</p>
+    <vue-better-scroll
+      style="height:55vh;padding-top: 2.8rem"
+      class="wrapper"
+      ref="scroll"
+      :scrollbar="scrollbarObj"
+      :pullUpLoad="pullUpLoadObj"
+      :startY="parseInt(startY)"
+      @pullingUp="onPullingUp">
+      <!--标题-->
+      <div class="time-container">
+        <div class="left-box">
+          <p>{{ Statistics.leftSum }}</p>
+          <p>个访客</p>
         </div>
-      &lt;!&ndash;</router-link>&ndash;&gt;
-    </div>-->
+        <div class="right-box">
+          <ul>
+            <li>查看了你的商品<span>{{ Statistics.rightSum[0] }}</span>次</li>
+            <li>查看了你的名片<span>{{ Statistics.rightSum[1] }}</span>次</li>
+            <li>查看了你的官网<span>{{ Statistics.rightSum[2] }}</span>次</li>
+          </ul>
+        </div>
+      </div>
+      <!--内容-->
+      <Info :introduce="introduce"></Info>
+    </vue-better-scroll>
   </div>
 </template>
 
 <script>
   import SelectTime from '@/components/template/SelectTime'
   import Info from '@/components/template/Info'
+  import VueBetterScroll from 'vue2-better-scroll'
+  let count = 1;
   export default {
     name: "Time",
     data() {
       return {
+        active:0,
         introduce:[
           // {day:"2018/10/08",time:"17:42",src:require("@/assets/images/logo.png"),name:"猫"},
           // {day:"2018/10/08",time:"17:42",src:require("@/assets/images/logo.png"),name:"猫和"},
@@ -58,7 +55,25 @@
         Statistics:{
           leftSum:0,
           rightSum:[0,0,0]
-        }
+        },
+
+        // 这个配置可以开启滚动条，默认为 false。当设置为 true 或者是一个 Object 的时候，都会开启滚动条，默认是会 fade 的
+        scrollbarObj: {
+          fade: true
+        },
+        // 这个配置用于做上拉加载功能，默认为 false。当设置为 true 或者是一个 Object 的时候，可以开启上拉加载，可以配置离底部距离阈值（threshold）来决定开始加载的时机
+        pullUpLoadObj: {
+          threshold: 0,
+          txt: {
+            more: ' ',
+            noMore: '没有更多数据了'
+          }
+        },
+        startY: 0,  // 纵轴方向初始化位置
+        scrollToX: 0,
+        scrollToY: 0,
+        scrollToTime: 700,
+        items: []
       }
     },
     created(){
@@ -68,7 +83,7 @@
       this.axios.get('action_times.php?type=times&token=faa7a1785e768e9826f33eab6026c255').then(res=>{
       // this.axios.get('actionOne.php?type=times&token=faa7a1785e768e9826f33eab6026c255').then(res=>{
       // this.axios.get('introduce').then(res=>{
-        console.log(res.data);
+      //   console.log(res.data);
         // this.introduce=res.data
         this.Statistics=res.data.Statistics
         this.introduce=res.data.introduce
@@ -76,8 +91,56 @@
     },
     components:{
       SelectTime,
-      Info
+      Info,
+      VueBetterScroll
     },
+    methods:{
+      showTime(data) {
+        this.Statistics=data.Statistics
+        this.introduce=data.introduce
+      },
+      // 滚动到页面顶部
+      scrollTo () {
+        this.$refs.scroll.scrollTo(this.scrollToX, this.scrollToY, this.scrollToTime)
+      },
+      // 模拟数据请求
+      getData () {
+        return new Promise(resolve => {
+          setTimeout(() => {
+            const arr = [];
+            count++;
+            console.log(count);
+            this.axios.post('action_times.php?type=times&token=faa7a1785e768e9826f33eab6026c255',{
+              page:count
+            }).then(res=>{
+              console.log(res.data.introduce);
+              console.log(res.data.length);
+              let length=res.data.introduce.length;
+              if (res.data.introduce.length == 0) {
+                this.$toast('无更多数据')
+              }
+              for (let i = 0; i < length; i++) {
+                this.introduce.push(res.data.introduce[i])
+              }
+              // console.log(this.introduce);
+              resolve(arr)
+            })
+          }, 1000)
+        })
+      },
+      onPullingUp () {
+        // 模拟上拉 加载更多数据
+        console.log('上拉加载')
+        this.getData().then(res => {
+          this.items = this.items.concat(res)
+          if(count<50){
+            this.$refs.scroll.forceUpdate(true)
+          }else{
+            this.$refs.scroll.forceUpdate(false)
+          }
+        })
+      },
+    }
 /*    beforeRouteEnter(to, from, next) {
       console.log(to);
 
@@ -96,12 +159,23 @@
 
 <style scoped>
   .rader-container {
-    padding: .4rem .5rem;
+    padding: .0rem .5rem;
+  }
+  .rader-container .title {
+    width: 91%;
+    height: 2.5rem;
+    line-height: 1rem;
+    background: #fff;
+    position: fixed;
+    z-index: 2;
   }
   .rader-container .title ul {
     width: 100%;
     height: 1rem;
     line-height: 1rem;
+    padding-top: .4rem;
+    background: #fff;
+    margin-bottom: -.24rem;
   }
   .rader-container .title li {
     width: 33.3%;
@@ -165,6 +239,7 @@
     box-shadow:-.12rem .12rem .1rem rgba(0,0,0,.03);
     padding: .5rem .3rem;
     box-sizing: border-box;
+    margin-top: -.1rem;
   }
   .time-container {
     display: table;

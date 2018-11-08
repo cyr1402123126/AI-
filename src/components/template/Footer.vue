@@ -133,7 +133,4 @@
     display: block;
     width: .55rem;
   }
-  .van-tabbar--fixed {
-    z-index: 10000!important;
-  }
 </style>

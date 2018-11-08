@@ -11,9 +11,9 @@
     name: "Action",
     data () {
       this.chartSettings = {
-        metrics: ['访问用户'],
+        metrics: ['访问量'],
         dataOrder: {
-          label: '访问用户',
+          label: '访问量',
           order: 'desc'
         },
 

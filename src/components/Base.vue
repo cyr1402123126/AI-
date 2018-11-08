@@ -28,7 +28,7 @@
     font-size: .55rem;
   }
   .Opacity-enter-active,.Opacity-leave-active {
-    transition: opacity .05s;
+    transition: opacity .03s;
   }
   .Opacity-enter,.Opacity-leave-to {
     opacity: 0;

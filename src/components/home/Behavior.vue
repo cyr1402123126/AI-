@@ -9,7 +9,7 @@
       </ul>
     </div>
     <div class="rader-day">
-      <SelectTime></SelectTime>
+      <SelectTime :active="active" @showBehavior="showBehavior"></SelectTime>
       <!--<p class="clearfix">
         7天内被查看的行为统计
         <span class="right"><img src="~@/assets/images/calendar.png" alt=""></span>
@@ -67,6 +67,7 @@
     name: "Behavior",
     data(){
       return {
+        active:1,
         type:[
          /* {"content":"查看商品","sum":10},
           {"content":"查看官网","sum":11},
@@ -87,7 +88,6 @@
     created() {
       this.$store.commit('getActive',0)
       this.axios.get('action_behavior.php?type=behavior&token=4f36b41cc2d10a4a8f22d712fa342599').then(res=>{
-        console.log(res.data);
         this.type=res.data.type;
         this.Statistics=res.data.Statistics;
       })
@@ -95,6 +95,13 @@
     components:{
       SelectTime,
     },
+    methods:{
+      showBehavior(data) {
+        this.type=data.type;
+        this.Statistics=data.Statistics;
+        console.log(data);
+      }
+    }
   }
 </script>
 

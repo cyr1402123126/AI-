@@ -54,6 +54,10 @@
         count:true
       }
     },
+    props:['active'],
+    created() {
+      console.log(this.active);
+    },
     methods:{
       getAlert() {
         this.flag1=true;
@@ -72,8 +76,30 @@
       beforeClose(action, done) {
         // this.startTime='';
         // this.endTime='';
+
         if (action === 'confirm') {
           setTimeout(done, 1000);
+          setTimeout(()=>{
+            if (this.active) {
+              this.axios.post('https://tc.wedotop.com/Api/action_behavior.php?type=behavior&token=4f36b41cc2d10a4a8f22d712fa342599',{
+                startTime:this.startTime,
+                endTime:this.endTime
+              }).then(res=>{
+                this.$emit('showBehavior',res.data)
+                console.log(res.data);
+              });
+            }else {
+              this.axios.post('https://tc.wedotop.com/Api/action_times.php?type=times&token=faa7a1785e768e9826f33eab6026c255',{
+                startTime:this.startTime,
+                endTime:this.endTime
+              }).then(res=>{
+                this.$emit('showTime',res.data)
+                console.log(res.data);
+              });
+            }
+            this.startTime='';
+            this.endTime='';
+          },1000)
         } else {
           done();
         }
@@ -82,6 +108,25 @@
         if (this.count) {
           this.startTime=this.currentValue.toString();
         }else {
+          let first=this.startTime.split(',');
+          let end=this.currentValue;
+          /*console.log(first[0] + '----' + end[0]);
+          console.log(first[1] + '----' + end[1]);
+          console.log(first[2] + '----' + end[2]);*/
+          if (end[0]>=first[0]) {
+            if (end[1]==first[1]) {
+              if (end[2]<first[2]) {
+                this.$toast('所选时间不能低于开始时间，请重选');
+                return false;
+              }
+            }else if (end[1]<first[1]) {
+              this.$toast('所选时间不能低于开始时间，请重选');
+              return false;
+            }
+          }else {
+            this.$toast('所选时间不能低于开始时间，请重选');
+            return false;
+          }
           this.endTime=this.currentValue.toString();
         }
         this.show=false;
@@ -92,7 +137,7 @@
       },
       getValue(e) {
         this.currentValue=e.getValues();
-        console.log(e.getValues())
+        // console.log(e.getValues())
       },
       getEnd() {
         this.show=true;

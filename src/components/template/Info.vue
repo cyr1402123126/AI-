@@ -24,6 +24,9 @@
     data() {
       return {
       }
+    },
+    created() {
+      console.log(this.introduce);
     }
   }
 </script>
