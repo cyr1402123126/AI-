@@ -36,8 +36,8 @@
           <div class="card-add clearfix">
             <div class="left">
               <p>名片浏览数</p>
-              <p>{{ myPaper.data.active.sum }}</p>
-              <p>{{ myPaper.data.active.state }}</p>
+              <p>{{ myPaper.data.see.sum }}</p>
+              <p>{{ myPaper.data.see.state }}</p>
             </div>
             <div class="left">
               <p>活跃客户</p>
@@ -144,6 +144,7 @@
       this.$store.commit('getActive',3)
       this.axios.get('paper.php?type=paper&token=e0bc95d9445836ae05679203a9b8fe3e')
         .then(res=>{
+          console.log(res.data[0]);
           this.myPaper=res.data[0];
           // console.log(res.data[0]);
         })

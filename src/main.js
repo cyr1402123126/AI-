@@ -14,6 +14,7 @@ import qs from 'qs';
 import Vuex from 'vuex'
 import { store } from './store/store'
 import autosize from 'v-autosize/dist/plugin';
+import 'lrz/dist/lrz.all.bundle'
 
 axios.interceptors.request.use( (config) => {
   if (config.method=="post"){
@@ -24,7 +25,6 @@ axios.interceptors.request.use( (config) => {
 },  (error) => {
   return Promise.reject(error);
 });
-
 /*axios.interceptors.request.use( (config) => {
   if (config.method=="post"){
     config.data = qs.stringify(config.data);

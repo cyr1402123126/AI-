@@ -184,8 +184,8 @@
           this.showInput = !this.showInput;
           var commentValue = that.commentValue;
           var replyItemId = that.replyItem.id;
-          console.log("comment_id---"+commentValue);
-          console.log("content---"+replyItemId);
+          // console.log("comment_id---"+commentValue);
+          // console.log("content---"+replyItemId);
           this.axios.post('dynamic_detail.php',{
             token:"a3d529d5085ef093cd36dc4cae09d599",
             type:"detail",
@@ -195,7 +195,7 @@
           }).then(res=>{
             that.addReply(res.data);
             that.commentValue = '';
-            let data=res.data.state.comment;
+            /*let data=res.data.state.comment;
             let arr=[];
             data.forEach(val=>{
               // console.log(val);
@@ -204,16 +204,38 @@
                 val.reply.forEach(item=>{
                   arr.push(item)
                 });
-              }else {
-                arr.push(val)
               }
             })
             // console.log(arr);
             res.data.state.comment=arr
             // console.log(res.data.state.person);
-            this.state=[res.data.state];
+            this.state=[res.data.state];*/
+            this.getData(res);
           })
         }
+      },
+      getData(res) {
+        let data=res.data.state.comment;
+        let arr=[];
+        console.log(data ==null);
+        if (data.length==0) {
+          this.flag=false;
+        }
+        data.forEach(val=>{
+          // console.log(val);
+          arr.push(val)
+          if (val.reply) {
+            val.reply.forEach(item=>{
+              // console.log(item);
+              arr.push(item)
+              // console.log(arr);
+            });
+          }
+        });
+        // console.log(arr);
+        res.data.state.comment=arr
+        // console.log(res.data.state.person);
+        this.state=[res.data.state];
       }
     },
     created(){
@@ -231,30 +253,7 @@
         // console.log(res.data.state.comment);
         // that.state.push([res.data.state]);
 
-        let data=res.data.state.comment;
-        let arr=[];
-        console.log(data ==null);
-        if (data.length==0) {
-          this.flag=false;
-        }
-        data.forEach(val=>{
-          // console.log(val);
-          arr.push(val)
-          if (val.reply) {
-            val.reply.forEach(item=>{
-              // console.log(item);
-              arr.push(item)
-              // console.log(arr);
-            });
-          }else {
-            arr.push(val)
-          }
-        });
-        // console.log(arr);
-        res.data.state.comment=arr
-        // console.log(res.data.state.person);
-        this.state=[res.data.state];
-
+        this.getData(res);
       })
     },
     components:{

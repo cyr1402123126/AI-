@@ -187,7 +187,7 @@
         return true;
       }
     },
-    mounted() {
+/*    mounted() {
       var flag=true;
       window.onresize=function () {
         if (flag) {
@@ -198,7 +198,7 @@
           flag = true;
         }
       }
-    }
+    }*/
   }
 </script>
 
