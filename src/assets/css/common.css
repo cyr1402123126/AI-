@@ -6,6 +6,10 @@ body {
   font-family: helvetica;
   background: #fff;
 }
+body::-webkit-scrollbar {
+  width: 0px;
+  display: none;
+}
 .bscroll-indicator {
   background: #fff!important;
   width: 0!important;
@@ -14,7 +18,7 @@ body * {
   -webkit-test-size-adjust:100%;
   -webkit-overflow-scrolling: touch;
 }
-a,button,input {
+a,button,input,optgroup,select,textarea {
   -webkit-tap-highlight-color: rgba(0,0,0,0);
 }
 button,input {
@@ -79,3 +83,7 @@ img {
 .van-image-preview__index {
   display: none;
 }
+.van-radio__input {
+  bottom: .4rem;
+}
+

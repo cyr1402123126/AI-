@@ -104,11 +104,11 @@
         </van-tabs>
       </div>
       <!--底部栏-->
-      <!--<van-tabbar v-model="active1">
+      <van-tabbar v-model="active1">
         <van-tabbar-item icon="records" :to="{name:'compile'}">编辑资料</van-tabbar-item>
         <van-tabbar-item icon="chat">发消息</van-tabbar-item>
-        <van-tabbar-item icon="shop">添加跟进</van-tabbar-item>
-      </van-tabbar>-->
+        <van-tabbar-item icon="shop" :to="{name:'add'}">添加跟进</van-tabbar-item>
+      </van-tabbar>
 
       <!--选择比例-->
       <van-popup v-model="percentageShow" position="bottom" :overlay="true">

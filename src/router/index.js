@@ -27,6 +27,7 @@ const Card =()=>import('@/components/me/Info')
 const LookCard =()=>import('@/components/home/look/LookCard')
 const CustomerInfo =()=>import('@/components/address/CustomerInfo')
 const Compile =()=>import('@/components/address/customerInfo/Compile')
+const Add =()=>import('@/components/address/customerInfo/Add')
 
 const suggest =()=>import('@/components/me/suggest/suggest')
 const Confirmsuggest = ()=>import('@/components/me/suggest/Confirmsuggest')
@@ -66,7 +67,8 @@ export default new Router({
     {path:'/behavior/lookCard',name:'lookCard',component:LookCard,meta:{title:"查看名片"}},
     //客户详情
     {path:'/address/:id',name:'customerInfo',component:CustomerInfo,meta:{title:"查看名片"}},
-    {path:'/address/customerInfo/compile',name:'compile',component:Compile,meta:{title:"资料详情"}},
+    {path:'/address/:id/compile',name:'compile',component:Compile,meta:{title:"资料详情"}},
+    {path:'/address/:id/add',name:'add',component:Add,meta:{title:"跟进"}},
 
 
     //意见列表

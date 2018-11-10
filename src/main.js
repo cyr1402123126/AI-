@@ -83,8 +83,8 @@ else if (process.env.NODE_ENV == 'prodution') {
 
 if (process.env.NODE_ENV === 'development') {
   axios.defaults.baseURL = 'https://mp.wedotop.com/Api/'
-  // axios.defaults.baseURL = 'https://tc.wedotop.com/Api/'
   // axios.defaults.baseURL = '/api'
+  // axios.defaults.baseURL = 'https://tc.wedotop.com/Api/'
 // 编译环境
 } else {
   // 测试环境
