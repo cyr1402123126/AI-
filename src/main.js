@@ -5,6 +5,7 @@ import App from './App'
 import Vant from 'vant';
 import router from './router'
 import './rem.js'
+import './assets/js/common'
 import 'vant/lib/vant-css/index.css';
 import './assets/css/common.css'
 import axios from 'axios'

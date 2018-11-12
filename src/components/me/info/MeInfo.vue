@@ -9,6 +9,12 @@
         placeholder="请输入姓名"
       />
       <van-field
+        v-model="major"
+        type="text"
+        label="职位"
+        placeholder="请输入职位"
+      />
+      <van-field
         v-model="phone"
         type="number"
         label="手机"
@@ -68,6 +74,7 @@
     data() {
       return {
         username:'',
+        major:'',
         areaList:'',
         phone:"",
         wechat:"",
@@ -90,6 +97,7 @@
         .then(res=>{
           console.log(res.data);
           this.username=res.data.username;
+          this.major=res.data.major;
           this.phone=res.data.phone;
           this.wechat=res.data.wechat;
           this.telphone=res.data.telphone;
@@ -117,6 +125,7 @@
         // let qs = require('qs');
         let data={
           username:this.username,
+          major:this.major,
           phone:this.phone,
           wechat:this.wechat,
           telphone:this.telphone,
@@ -148,6 +157,10 @@
           Toast('请輸入姓名');
           return false;
         }
+        if (this.major == '') {
+          Toast('请輸入职位名称');
+          return false;
+        }
         if (this.phone == '') {
           Toast('请填写手机号码');
           return false;
@@ -160,10 +173,10 @@
           Toast('请填写微信号');
           return false;
         }
-        if (this.telphone == '') {
+        /*if (this.telphone == '') {
           Toast('请填写座机号码');
           return false;
-        }
+        }*/
         /*if (!(/^0(([1-9]\d)|([3-9]\d{2}))\d{8}$/.test(this.telphone))) {
           Toast('座机号码格式不对,请重填');
           return false;

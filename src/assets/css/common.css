@@ -86,4 +86,9 @@ img {
 .van-radio__input {
   bottom: .4rem;
 }
-
+.van-radio .van-icon-checked {
+  color: #3e84ff;
+}
+.van-switch--on {
+  background: #3b83ff;
+}

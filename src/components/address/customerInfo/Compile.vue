@@ -4,54 +4,69 @@
       <ul>
         <li>
           <img class="left" src="@/assets/images/logo.png" alt="">
-          <div class="right">燕子</div>
+          <div class="right">{{ name }}</div>
         </li>
         <li>
           <p class="left">备注名</p>
-          <input type="text" placeholder="未填写">
+          <input type="text" placeholder="未填写" v-model="remarkName">
         </li>
         <li>
           <p class="left">公司</p>
-          <input type="text" placeholder="未填写">
+          <input type="text" placeholder="未填写" v-model="company">
         </li>
         <li>
           <p class="left">职位</p>
-          <input type="text" placeholder="未填写">
+          <input type="text" placeholder="未填写" v-model="major">
         </li>
         <li>
           <p class="left">性别</p>
-          <van-radio-group v-model="radio">
+          <van-radio-group v-model="sex">
             <van-radio name="1">男</van-radio>
             <van-radio name="2">女</van-radio>
           </van-radio-group>
         </li>
         <li>
           <p class="left">标签</p>
-          <p class="right">共<span>3</span>个<img src="@/assets/images/icons_right.png" style="width: .25rem;height: .4rem;margin: 0 0 0.05rem .25rem;" alt=""></p>
+          <p class="right">共<span>{{ tags }}</span>个<img src="@/assets/images/icons_right.png" style="width: .25rem;height: .4rem;margin: 0 0 0.05rem .25rem;" alt=""></p>
         </li>
         <li>
           <p class="left">备注手机</p>
-          <input type="text" placeholder="未填写">
+          <input type="number" placeholder="未填写" v-model="phone">
         </li>
         <li>
           <p class="left">邮箱</p>
-          <input type="text" placeholder="未填写">
+          <input type="text" placeholder="未填写" v-model="email">
         </li>
         <li>
           <p class="left">详细地址</p>
-          <input type="text" placeholder="未填写">
+          <input type="text" placeholder="未填写" v-model="address">
         </li>
-        <li>
+        <li @click="getBirthDay">
           <p class="left">生日</p>
-          <input type="text" placeholder="未填写">
+          <input type="text" placeholder="未填写" readonly v-model="birthDay">
         </li>
         <li>
           <p class="left">屏蔽TA的消息推送</p>
           <van-switch v-model="checked" />
         </li>
+        <li>
+          <p style="height: 1rem">备注</p>
+          <textarea v-autosize placeholder="未填写" v-model="discuss"></textarea>
+        </li>
       </ul>
     </div>
-    <input type="button" value="保存">
+    <input type="button" value="保存" @click="save">
+
+    <!--时间选择器-->
+    <van-popup v-model="show" position="bottom" :overlay="true">
+      <van-datetime-picker
+        v-model="currentDate"
+        type="date"
+        :max-date="maxDate"
+        :min-date="minDate"
+        @confirm="confirm"
+      />
+    </van-popup>
   </div>
 
 </template>
@@ -61,8 +76,59 @@
     name: "Compile",
     data() {
       return {
-        radio: '1',
-        checked: false
+        // 信息
+        name:"燕子",
+        remarkName: '',
+        company: '',
+        major: '',
+        sex: '1',
+        phone: '',
+        email: '',
+        address: '',
+        birthDay: '',
+        discuss: '',
+        checked: false,
+        tags:0,
+
+        show:false,
+        maxDate: new Date(),
+        minDate: new Date(1950, 1, 1),
+        currentDate: new Date(1993, 6, 7),
+        birthDay:''
+      }
+    },
+    created() {
+      this.$store.commit('getAddressActive',0);
+    },
+    methods: {
+      getBirthDay() {
+        this.show=true;
+      },
+      confirm(val) {
+        let month = val.getMonth() + 1;
+        let day = val.getDate();
+        month = month < 10 ? ('0'+month) : month;
+        day = day < 10 ? ('0'+day) : day;
+        // this.birthDay=val.getFullYear() + '-' + (val.getMonth() + 1) + '-' + val.getDate();
+        this.birthDay=val.getFullYear() + '-' + month + '-' + day;
+        this.show=false;
+      },
+      save() {
+        if (this.beforeSbmit()) {
+          this.$toast('保存成功');
+          this.$router.go(-1);
+        }
+      },
+      beforeSbmit() {
+        if (this.phone != '' && !(/^1[34578]\d{9}$/.test(this.phone))) {
+          this.$toast('手机号码有误,请重填');
+          return false;
+        }
+        if (this.email != '' && !/^[\w\-\.]+@[\w\-\.]+(\.\w+)+$/.test(this.email)) {
+          this.$toast('请填写正确的邮箱格式');
+          return false;
+        }
+        return true;
       }
     }
   }
@@ -81,6 +147,7 @@
         color: #333333;
         font-size: .4rem;
         clear: both;
+        position: relative;
         img {
           width: 1rem;
           height: 1rem;
@@ -92,6 +159,28 @@
           float: right;
           color: #888888;
         }
+        textarea{
+          resize:none;
+          background: #fff;
+          width: 100%;
+          height: 2.5rem;
+          border: none;
+          line-height: 1.8;
+          color: #888;
+          margin-top: .25rem;
+        }
+      }
+      li:not(:last-child):after {
+        position: absolute;
+        content: '';
+        /*top: 0%;*/
+        bottom: 0;
+        left: -50%;
+        right: -50%;
+        -webkit-transform: scale(0.5);
+        transform: scale(0.5);
+        border-top: 1px solid #efefef;
+        height: 0px;
       }
     }
   }
@@ -107,31 +196,16 @@
     z-index: 1000;
   }
   ::-webkit-input-placeholder { /* WebKit browsers */
-    color:    #888;
+    color:    #b3b3b3;
   }
   :-moz-placeholder { /* Mozilla Firefox 4 to 18 */
-    color:    #888;
+    color:    #b3b3b3;
   }
   ::-moz-placeholder { /* Mozilla Firefox 19+ */
-    color:    #888;
+    color:    #b3b3b3;
   }
   :-ms-input-placeholder { /* Internet Explorer 10+ */
-    color:    #888;
-  }
-  li {
-    position: relative;
-  }
-  li:after {
-    position: absolute;
-    content: '';
-    /*top: 0%;*/
-    bottom: 0;
-    left: -50%;
-    right: -50%;
-    -webkit-transform: scale(0.5);
-    transform: scale(0.5);
-    border-top: 1px solid #efefef;
-    height: 0px;
+    color:    #b3b3b3;
   }
   @media (-webkit-min-device-pixel-radio: 1.5), (min-device-pixel-radio: 1.5) {
     border-1px::after {
@@ -162,5 +236,8 @@
   .wraper::-webkit-scrollbar {
     width: 0px;
     display: none;
+  }
+  .van-radio .van-icon-checked {
+    background: #3e84ff;
   }
 </style>

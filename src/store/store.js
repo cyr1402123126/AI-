@@ -16,6 +16,15 @@ export const store = new Vuex.Store({
     staff_id:'',
     customer_id:'',
     active:0,
+    //跟进添加标签
+    newTags:[],
+    myTag:'选择跟进常用语',
+    //标签页面保存自定义标签
+    tags:['莫泊桑'],
+    //客户详情标签
+    customerTags: ['添加标签','添加标签','添加标签'],
+    //通讯录底边栏激活
+    active1:0
   },
   getters:{
     // 获取属性的状态
@@ -62,7 +71,29 @@ export const store = new Vuex.Store({
     },
     getActive(state,data) {
       state.active=data;
+    },
+    //添加跟进标签
+    saveTag(state,data) {
+      state.newTags.unshift(data);
+    },
+    //删除跟进标签
+    deleteTag(state,index) {
+      state.newTags.splice(index,1)
+    },
+    //选择跟进标签
+    selectTag(state,data) {
+      state.myTag=data;
+    },
+    //标签页面保存自定义标签
+    addTag(state,data) {
+      state.tags.push(data)
+    },
+    //通讯录底边栏激活
+    getAddressActive(state,data) {
+      state.active1 = data;
     }
+
+
   },
   actions:{
     // 应用mutations

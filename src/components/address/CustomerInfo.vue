@@ -10,9 +10,9 @@
               <div class="left label">
                 <p class="title">{{ look.top.name }}</p>
                 <p>
-                  <span>{{ look.top.label[0] }}</span>
-                  <span>{{ look.top.label[1] }}</span>
-                  <span>{{ look.top.label[2] }}</span>
+                  <router-link :to="{name:'addTags'}" tag="span">{{ look.top.label[0] }}</router-link>
+                  <router-link :to="{name:'addTags'}" tag="span">{{ look.top.label[1] }}</router-link>
+                  <router-link :to="{name:'addTags'}" tag="span">{{ look.top.label[2] }}</router-link>
                 </p>
               </div>
             </div>
@@ -107,6 +107,7 @@
       <van-tabbar v-model="active1">
         <van-tabbar-item icon="records" :to="{name:'compile'}">编辑资料</van-tabbar-item>
         <van-tabbar-item icon="chat">发消息</van-tabbar-item>
+        <!--<van-tabbar-item icon="chat" :to="{name:'chat',params:{staff_id:item.staff_id,customer_id:item.customer_id}}">发消息</van-tabbar-item>-->
         <van-tabbar-item icon="shop" :to="{name:'add'}">添加跟进</van-tabbar-item>
       </van-tabbar>
 
@@ -255,7 +256,7 @@
       }
     },
     created() {
-      this.$store.commit('getActive',2)
+      this.active1 = this.$store.state.active1;
       let staff_id=this.getCookie('staff_id');
       this.axios.post('customer_detail.php',{
         token : "af79028c6574ed3b6359b74ab0112796",
