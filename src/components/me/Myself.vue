@@ -113,9 +113,11 @@
     padding: .65rem;
   }
   .myself-top .myself-img{
-    width: 1.8rem;
+    width: 1.6rem;
   }
   .myself-top .myself-img img{
+    width: 1.6rem;
+    height: 1.6rem;
     border-radius: 50%;
   }
   .myself-top .myself-name{

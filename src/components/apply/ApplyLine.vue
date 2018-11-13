@@ -104,6 +104,8 @@
   }
   .ApplyLine-img img {
     border-radius: 50%;
+    width: 1.3rem;
+    height: 1.3rem;
   }
   .ApplyLine-top {
     padding: .4rem .5rem;

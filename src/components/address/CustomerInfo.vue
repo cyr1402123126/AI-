@@ -36,12 +36,12 @@
           <van-tab title="互动">
             <!--style="height:8.8rem"-->
             <VueBetterScroll
-              style="height:10rem"
+              style="height:8rem"
               class="wrapper"
               ref="scroll">
               <div class="action">
                 <div class="action-box" v-for="(item,index) in look.action" :key="index">
-                  <img src="@/assets/images/sign_yellow.png" alt="">
+                  <img :src="item.img" alt="">
                   <p class="time">{{ item.time }}<span>{{ item.hour }}</span></p>
                   <p class="update">{{ item.content }}</p>
                 </div>
@@ -51,7 +51,7 @@
           <!--资料-->
           <van-tab title="资料">
             <VueBetterScroll
-              style="height:10rem"
+              style="height:8rem"
               class="wrapper"
               ref="scroll">
               <div class="data">
@@ -68,7 +68,7 @@
                   <ul class="clearfix">
                     <li>TA的标签
                       <span class="right">
-                        <mark v-for="(item,index) in look.data.label" :key="index">{{ item }}%</mark>
+                        <mark v-for="(item,index) in look.data.label" :key="index">{{ item }}</mark>
                       </span>
                     </li>
                   </ul>
@@ -91,7 +91,7 @@
           <!--AI分析-->
           <van-tab title="AI分析">
             <VueBetterScroll
-              style="height:10rem"
+              style="height:8rem"
               class="wrapper"
               ref="scroll">
               <div class="chart">
@@ -103,13 +103,13 @@
           </van-tab>
         </van-tabs>
       </div>
-      <!--底部栏-->
+<!--      &lt;!&ndash;底部栏&ndash;&gt;
       <van-tabbar v-model="active1">
         <van-tabbar-item icon="records" :to="{name:'compile'}">编辑资料</van-tabbar-item>
-        <van-tabbar-item icon="chat">发消息</van-tabbar-item>
-        <!--<van-tabbar-item icon="chat" :to="{name:'chat',params:{staff_id:item.staff_id,customer_id:item.customer_id}}">发消息</van-tabbar-item>-->
+        <van-tabbar-item icon="chat" :to="{name:'chat',params:{staff_id:staff_id,customer_id:$route.params.id}}">发消息</van-tabbar-item>
+        &lt;!&ndash;<van-tabbar-item icon="chat" :to="{name:'chat',params:{staff_id:item.staff_id,customer_id:item.customer_id}}">发消息</van-tabbar-item>&ndash;&gt;
         <van-tabbar-item icon="shop" :to="{name:'add'}">添加跟进</van-tabbar-item>
-      </van-tabbar>
+      </van-tabbar>-->
 
       <!--选择比例-->
       <van-popup v-model="percentageShow" position="bottom" :overlay="true">
@@ -128,6 +128,7 @@
           v-model="currentDate"
           type="date"
           :min-date="minDate"
+          @cancel="dateCancel"
           @confirm="dateConfirm"
           @change="dateChange"
         />
@@ -253,11 +254,13 @@
         minDate:new Date(),
         currentDate:new Date(),
         getValue:'',
+        staff_id: ''
       }
     },
     created() {
       this.active1 = this.$store.state.active1;
       let staff_id=this.getCookie('staff_id');
+      this.staff_id = staff_id;
       this.axios.post('customer_detail.php',{
         token : "af79028c6574ed3b6359b74ab0112796",
         type : "customer_detail",
@@ -278,16 +281,39 @@
         // Toast(`当前值：${value}, 当前索引：${index}`);
         console.log(picker);
         this.look.top.percentage=picker;
-        this.percentageShow=false;
+        this.axios.post('customer_detail.php?type=customer_detail&token=af79028c6574ed3b6359b74ab0112796&category=edit_plan_rate',{
+          plan_rate: this.look.top.percentage,
+          customer_id:this.$route.params.id
+        }).then(res=>{
+          this.look.action.unshift(res.data.data)
+          this.percentageShow=false;
+        })
       },
       percentageCancel() {
-
+        this.percentageShow=false;
+      },
+      dateCancel() {
+        this.dateShow=false;
       },
       dateConfirm(val) {
-        console.log(this.look.top.time);
+        /*console.log(this.look.top.time);
         this.look.top.time=this.getValue==''?this.look.top.time:this.getValue.join('-');
         console.log(this.look.top.time);
-        this.dateShow=false;
+        this.dateShow=false;*/
+        let month = val.getMonth() + 1;
+        let day = val.getDate();
+        month = month < 10 ? ('0'+month) : month;
+        day = day < 10 ? ('0'+day) : day;
+        this.look.top.time=val.getFullYear() + '-' + month + '-' + day;
+        console.log(this.look.top.time);
+        this.axios.post('customer_detail.php?type=customer_detail&token=af79028c6574ed3b6359b74ab0112796&category=edit_plan_time',{
+          plan_time: this.look.top.time,
+          customer_id: this.$route.params.id
+        }).then(res=>{
+          console.log(res.data);
+          this.look.action.unshift(res.data.data)
+          this.dateShow=false;
+        })
       },
       dateChange(val) {
         this.getValue=val.getValues();

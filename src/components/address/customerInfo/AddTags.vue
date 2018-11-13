@@ -1,56 +1,62 @@
 <template>
   <div>
     <div class="tags">
-      <div class="wraper">
-        <div class="title"><span class="green"></span>基本信息</div>
+      <div class="wraper" v-for="(value,index) in list" :key="index">
+        <div class="title"><span :class="value.color"></span>{{ value.title }}</div>
         <ul class="list base">
-          <li v-for="(item,index) in base" :key="index" @click="showGreen(item,$event)">{{ item }}</li>
-          <li></li>
+          <li :class="item.show ? item.class : ''" v-for="(item,index) in value.list" :key="index" @click="showColor(item,$event)">{{ item.name }}</li>
         </ul>
       </div>
       <div class="wraper">
-        <div class="title"><span class="green"></span>关注点</div>
-        <ul class="list">
-          <li v-for="(item,index) in attention" :key="index" @click="showGreen(item,$event)">{{ item }}</li>
-        </ul>
-      </div>
-      <div class="wraper">
-        <div class="title"><span class="blue"></span>级别</div>
-        <ul class="list">
-          <li v-for="(item,index) in rank" :key="index" @click="showBlue(item,$event)">{{ item }}</li>
-        </ul>
-      </div>
-      <div class="wraper">
-        <div class="title"><span class="blue"></span>类型</div>
-        <ul class="list">
-          <li v-for="(item,index) in type" :key="index" @click="showBlue(item,$event)">{{ item }}</li>
-        </ul>
-      </div>
-      <div class="wraper">
-        <div class="title"><span class="orange"></span>跟进状态</div>
-        <ul class="list">
-          <li v-for="(item,index) in follwStatus" :key="index" @click="showOrange(item,$event)">{{ item }}</li>
-        </ul>
-      </div>
-      <div class="wraper">
-        <div class="title"><span class="orange"></span>成交状态</div>
-        <ul class="list">
-          <li v-for="(item,index) in successStatus" :key="index" @click="showOrange(item,$event)">{{ item }}</li>
-        </ul>
-      </div>
-      <div class="wraper">
-        <div class="title"><span class="orange"></span>付款状态</div>
-        <ul class="list">
-          <li v-for="(item,index) in payStatus" :key="index" @click="showOrange(item,$event)">{{ item }}</li>
-        </ul>
-      </div>
-      <div class="wraper">
-        <div class="title"><span class="purple"></span>其他</div>
+        <div class="title"><span class="purple"></span>{{ other.title }}</div>
         <ul class="list end">
-          <li v-for="(item,index) in other" :key="index" @click="showPurple(item,$event)">{{ item }}</li>
+          <li :class="{purple:item.show}" v-for="(item,index) in other.list" :key="index" @click="showPurple(item,$event)">{{ item.id }}</li>
           <li class="left" style="font-size: .6rem" @click="addTag">+</li>
         </ul>
       </div>
+      <!--<div class="wraper">
+        <div class="title"><span class="green"></span>{{ attention.title }}</div>
+        <ul class="list">
+          <li :class="{green:item.show}" v-for="(item,index) in attention.list" :key="index" @click="showGreen(item,$event)">{{ item.name }}</li>
+        </ul>
+      </div>
+      <div class="wraper">
+        <div class="title"><span class="blue"></span>{{ rank.title }}</div>
+        <ul class="list">
+          <li :class="{blue:item.show}" v-for="(item,index) in rank.list" :key="index" @click="showBlue(item,$event)">{{ item.name }}</li>
+        </ul>
+      </div>
+      <div class="wraper">
+        <div class="title"><span class="blue"></span>{{ type.title }}</div>
+        <ul class="list">
+          <li :class="{blue:item.show}" v-for="(item,index) in type.list" :key="index" @click="showBlue(item,$event)">{{ item.name }}</li>
+        </ul>
+      </div>
+      <div class="wraper">
+        <div class="title"><span class="orange"></span>{{ follwStatus.title }}</div>
+        <ul class="list">
+          <li :class="{orange:item.show}" v-for="(item,index) in follwStatus.list" :key="index" @click="showOrange(item,$event)">{{ item.name }}</li>
+        </ul>
+      </div>
+      <div class="wraper">
+        <div class="title"><span class="orange"></span>{{ successStatus.title }}</div>
+        <ul class="list">
+          <li :class="{orange:item.show}" v-for="(item,index) in successStatus.list" :key="index" @click="showOrange(item,$event)">{{ item.name }}</li>
+        </ul>
+      </div>
+      <div class="wraper">
+        <div class="title"><span class="orange"></span>{{ payStatus.title }}</div>
+        <ul class="list">
+          <li :class="{orange:item.show}" v-for="(item,index) in payStatus.list" :key="index" @click="showOrange(item,$event)">{{ item.name }}</li>
+        </ul>
+      </div>
+      <div class="wraper">
+        <div class="title"><span class="purple"></span>{{ other.title }}</div>
+        <ul class="list end">
+          <li :class="{purple:item.show}" v-for="(item,index) in other.list" :key="index" @click="showPurple(item,$event)">{{ item.id }}</li>
+          <li class="left" style="font-size: .6rem" @click="addTag">+</li>
+        </ul>
+      </div>-->
     </div>
     <input type="button" value="保存" @click="save">
 
@@ -77,14 +83,65 @@
     name: "AddTags",
     data() {
       return {
-        base: ["男","女","已婚","00后","90后","80后","70后","60后"],
-        attention: ['在意价格','在意质量','在意服务'],
-        rank: ['一般客户','重要客户','核心客户','潜在客户','意向客户','流失客户'],
-        type: ['客户','渠道商','供应商','合作伙伴','直销客户','老客户推荐'],
-        follwStatus:['已发资料','已发报价','已拜访','价格谈判','合同审核','已签合同',],
-        successStatus: ['已成交','近期可成交','需长期跟进','流失'],
-        payStatus:['已付全款','已支付首付款','已支付尾款','未付全款','未支付首付款','未支付尾款'],
-        other: [],
+        list: [
+          {
+            color: 'green',
+            title: '基本信息',
+            list: [
+              {name: '男',id: 1,class: 'green',show: true},{name: '女',id: 2,class: 'green',show: true},{name: '已婚',id: 3,class: 'green',show: false},{name: '00后',id: 4,class: 'green',show: false},
+              {name: '90后',id: 5,class: 'green',show: false},{name: '80后',id: 6,class: 'green',show: false},{name: '70后',id: 7,class: 'green',show: false},{name: '60后',id: 8,class: 'green',show: false},{name: '50后',id: 50,class: 'green',show: false}
+            ],
+          },
+          {
+            color: 'green',
+            title: '关注点',
+            list: [
+              {name: '在意价格',id: 9,class: 'green',show: false},{name: '在意质量',id: 10,class: 'green',show: false},{name: '在意服务',id: 11,class: 'green',show: false}
+            ]
+          },
+          {
+            color: 'blue',
+            title: '级别',
+            list: [
+              {name: '一般客户',id: 12,class: 'blue',show: true},{name: '重要客户',id: 13,class: 'blue',show: false},{name: '核心客户',id: 14,class: 'blue',show: false},{name: '潜在客户',id: 15,class: 'blue',show: false},{name: '意向客户',id: 16,class: 'blue',show: false},{name: '流失客户',id: 17,class: 'blue',show: false}
+            ]
+          },
+          {
+            title: '类型',
+            color: 'blue',
+            list: [
+              {name: '客户',id: 18,class: 'blue',show: false},{name: '渠道商',id: 19,class: 'blue',show: false},{name: '供应商',id: 20,class: 'blue',show: false},{name: '合作伙伴',id: 21, class: 'blue',show: false},{name: '直销客户',id: 22, class: 'blue',show: false},{name: '老客户推荐',id: 23,class: 'blue',show: false}
+            ]
+          },
+          {
+            color: 'orange',
+            title: '跟进状态',
+            list: [
+              {name: '已发资料',id: 24,class: 'orange',show: false},{name: '已发报价',id: 25,class: 'orange',show: false},{name: '已拜访',id: 26,class: 'orange',show: false},{name: '价格谈判',id: 27,class: 'orange',show: false},{name: '合同审核',class: 'orange',id: 28,show: false},{name: '已签合同',id: 29,class: 'orange',show: false}
+            ]
+          },
+          {
+            color: 'orange',
+            title: '成交状态',
+            list: [
+              {name: '已成交',id: 30,class: 'orange',show: false},{name: '近期可成交',id: 31,class: 'orange',show: false},{name: '需长期跟进',id: 32,class: 'orange',show: false},{name: '流失',id: 33,class: 'orange',show: false}
+            ]
+          },
+          {
+            color: 'purple',
+            title :'付款状态',
+            list :[
+              {name: '已付全款',id: 34,class: 'purple',show: true},{name: '已支付首付款',id: 35,class: 'purple',show: false},{name: '已支付尾款',id: 36,class: 'purple',show: false},{name: '未付全款',id: 37,class: 'purple',show: false},{name: '未支付首付款',id: 38,class: 'purple',show: false},{name: '未支付尾款',id: 39,class: 'purple',show: false}
+            ]
+          },
+        ],
+        other: {
+          title: '其他',
+          list: [
+            {name: '已付全款',id: 34,show: true}
+          ]
+        },
+
 
         //添加标签
         show:false,
@@ -96,8 +153,16 @@
       }
     },
     created() {
-      console.log(this.$store.state.tags);
+      /*console.log(this.$store.state.tags);
       this.other = this.$store.state.tags;
+      let arr = [1,46];
+      this.base.forEach((value,index)=>{
+        this.arr.forEach((item,count)=>{
+          if (value.id == item) {
+            this
+          }
+        })
+      })*/
     },
     methods: {
       showGreen(data,e) {
@@ -112,16 +177,32 @@
       showPurple(data,e) {
         this.changeBackground(data,e,"purple");
       },
-      changeBackground(data,e,color) {
+      showColor(data,e) {
+        // this.changeBackground(data,e,"green");
         let dom=e.target;
-        if (dom.className == color) {
+        if (dom.className == data.class) {
           dom.className = '';
-          this.arr.remove(data)
+          this.arr.remove(data.id);
         }else {
-          dom.className = color;
-          this.arr.push(data);
+          dom.className = data.class;
+          this.arr.push(data.id);
         }
         console.log(this.arr);
+        // console.log(data.show);
+      },
+      changeBackground(data,e,color) {
+        let dom=e.target;
+        if (dom.className == color || data.show) {
+          dom.className = '';
+          this.arr.remove(data.id);
+          data.show = false;
+        }else {
+          dom.className = color;
+          this.arr.push(data.id);
+          data.show = true;
+        }
+        console.log(this.arr);
+        console.log(data.show);
       },
       addTag() {
         this.tag='';
@@ -135,7 +216,7 @@
         }
       },
       done() {
-        this.other.push(this.tag)
+        this.other.push({id: this.tag})
         this.show=false;
       },
       confirm() {
@@ -145,7 +226,7 @@
         }else {
           // this.other.push(this.tag);
           this.show=false;
-          this.$store.commit('addTag',this.tag)
+          this.$store.commit('addTag',{id: this.tag})
         }
       },
       save() {
@@ -171,9 +252,11 @@
           height: .3rem;
           display: inline-block;
           border-radius: 50%;
-          background: #14c39c;
           margin-right: .3rem;
           margin-bottom: .02rem;
+        }
+        .green {
+          background: #14c39c;
         }
         .blue {
           background: #49aaf9;
@@ -226,11 +309,11 @@
           margin-right: 0;
         }
       }
-      .base {
+      /*.base {
         li:last-child {
           visibility: hidden;
         }
-      }
+      }*/
     }
     .wraper:last-of-type {
       border-bottom: none;
@@ -249,7 +332,6 @@
     font-size: .46rem;
     border-radius: .15rem;
   }
-
   .van-cell {
     width: 85%;
     border: 1px solid #d6d6d6;

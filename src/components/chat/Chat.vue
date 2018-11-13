@@ -175,6 +175,7 @@
 
     },
     created() {
+      this.$store.commit('getAddressActive',1);
       this.$store.commit('getActive',1)
       let staff_id=this.$route.params.staff_id;
       let customer_id=this.$route.params.customer_id;

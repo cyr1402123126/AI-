@@ -25,7 +25,7 @@
               </div>
             </div>
             <div class="wraper-bottom">
-              <router-link :to="{name:'applyAI'}">
+              <router-link :to="{name:'applyCard'}">
                 <van-cell-group>
                   <van-cell title="详细数据" is-link />
                 </van-cell-group>

@@ -21,10 +21,10 @@
               <!--<van-uploader :after-read="onRead" multiple v-if="!(myImgs.length>=9)">-->
               <!--<van-uploader>-->
                 <!--<input id="file" type="file" @change="test($event)" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" style="position: absolute;left: 0;top: 0rem;width: 2rem;height: 2rem;" />-->
-                <div class="ios" v-if="isIos">
-                  <input id="file" ref="inputer" type="file" @change="test1($event)" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" style="position: absolute;left: 0;top: 0rem;width: 2rem;height: 2rem;" />
-                  <img src="@/assets/images/sugAdd.png" alt="添加图片" title="添加图片" class="addPic">
-                </div>
+              <div class="ios" v-if="isIos">
+                <input id="file" ref="inputer" type="file" @change="test1($event)" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" style="opacity:0;position: absolute;left: 0;top: 0rem;width: 2rem;height: 2rem;" />
+                <img src="@/assets/images/sugAdd.png" alt="添加图片" title="添加图片" class="addPic">
+              </div>
               <div class="android" v-if="!isIos">
                 <van-uploader :after-read="onRead"  accept="image/gif,image/jpeg,image/jpg,image/png" v-if="!(myImgs.length>=9)">
                   <img src="@/assets/images/sugAdd.png" alt="添加图片" title="添加图片" class="addPic">

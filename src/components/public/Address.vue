@@ -92,7 +92,8 @@
       }
     },
     created() {
-      this.$store.commit('getActive',2)
+      this.$store.commit('getActive',2);
+      this.$store.commit('getAddressActive',0);
       // this.axios.get('address.php?type=address&token=2df885165ebea246edd089ddbd69af8c')
       this.axios.get('address.php?type=address&token=2df885165ebea246edd089ddbd69af8c')
         .then(res=>{

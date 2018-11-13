@@ -11,7 +11,11 @@
             <img :src="item" alt="" class="addPic">
             <img src="@/assets/images/me_close.png" alt="" @click="deleteMyImage(index)">
           </li>
-          <li style="width: 2.9rem;margin-top: 0;" v-show="!myImageShow">
+          <li class="ios" style="width: 2.9rem;margin-top: .5rem;" v-show="!myImageShow" v-if="isIos">
+            <input id="file" ref="inputer" type="file" @change="test1($event)" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" style="opacity:0;position: absolute;left: 0;top: 0rem;width: 2.8rem;height: 2.8rem;" />
+            <img src="@/assets/images/addPic.png" alt="" class="addPic">
+          </li>
+          <li class="android" style="width: 2.9rem;margin-top: 0;" v-show="!myImageShow" v-if="!isIos">
             <van-uploader accept="image/gif,image/jpeg,image/jpg,image/png" :after-read="onMyRead">
               <van-icon/>
               <img src="@/assets/images/addPic.png" alt="" class="addPic">
@@ -27,7 +31,7 @@
     <!--个人介绍-->
     <div class="welecome">
       <form action="">
-        <textarea v-model="textarea" type="text" name="wecomeText"  :placeholder='autoIntro' cols="5"></textarea>
+        <textarea v-autosize v-model="textarea" style="resize:none;" type="text" name="wecomeText"  :placeholder='autoIntro' cols="5"></textarea>
       </form>
     </div>
     <!--我的音乐-->
@@ -104,6 +108,7 @@
 
 <script>
   import { Dialog,Toast } from 'vant';
+  import EXIF from 'exif-js'
   export default {
     data(){
       return {
@@ -118,7 +123,8 @@
         lock:false,
         textarea:'',
         myImageShow:false,
-        myTitleImage:[]
+        myTitleImage:[],
+        isIos:true
       }
     },
     name: "MePerson",
@@ -137,7 +143,105 @@
           this.myImageShow=this.myTitleImage.length >0 && this.myTitleImage != null?true:false;
         })
     },
+    mounted() {
+      var u = navigator.userAgent;
+      // var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Adr') > -1; //android终端
+      var isiOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+      /*alert('是否是Android：'+isAndroid);
+      alert('是否是iOS：'+isiOS);*/
+      if (isiOS) {
+        this.isIos=true;
+      }else {
+        this.isIos=false;
+      }
+    },
     methods:{
+
+      test1(e) {
+        let that=this;
+        let inputDOM = this.$refs.inputer;
+        // 通过DOM取文件数据
+        for(let i in inputDOM.files){
+          this.file= inputDOM.files[i];
+          this.imgPreview(this.file);
+          EXIF.getData(this.file, function() {
+            that.Orientation = EXIF.getTag(this, 'Orientation');
+          });
+        }
+      },
+      imgPreview (file) {
+        //base64 格式
+        this.imgType=1;
+        this.img_loading=true;
+        let self = this;
+        let imgContent={};
+        imgContent.name=file.name;
+        // 看支持不支持FileReader
+        if (!file || !window.FileReader) return;
+
+        if (/^image/.test(file.type)) {
+          // 创建一个reader
+          var reader = new FileReader();
+          // 将图片将转成 base64 格式
+          reader.readAsDataURL(file);
+          // 读取成功后的回调
+          reader.onloadend = function () {
+            let IMG = new Image();
+            IMG.src = this.result;
+            IMG.onload = function(){
+              let w = this.naturalWidth,
+                h = this.naturalHeight,
+                resizeW = 0,
+                resizeH = 0;
+              //压缩设置
+              let maxSize = {
+                width:1280,      //图片最大宽度
+                height:1280,     //图片最大高度
+                level:0.6       //图片保存质量
+              };
+              //计算缩放比例
+              if(w > maxSize.width || h > maxSize.height){
+                let multiple = Math.max(w / maxSize.width , h / maxSize.height);
+                resizeW = w / multiple;
+                resizeH = h / multiple;
+              }else{
+                resizeW = w;
+                resizeH = h;
+              }
+              let canvas = document.createElement("canvas"),
+                cxt = canvas.getContext('2d');
+              //根据拍摄的角度进行图片旋转调整
+              if (self.Orientation == 3) {
+                canvas.width = resizeW;
+                canvas.height = resizeH;
+                cxt.rotate(Math.PI);
+                cxt.drawImage(IMG, 0, 0, -resizeW, -resizeH)
+              } else if (self.Orientation == 8) {
+                canvas.width = resizeH;
+                canvas.height = resizeW;
+                cxt.rotate(Math.PI * 3 / 2);
+                cxt.drawImage(IMG, 0, 0, -resizeW, resizeH)
+              } else if (self.Orientation == 6) {
+                canvas.width = resizeH;
+                canvas.height = resizeW;
+                cxt.rotate(Math.PI / 2);
+                cxt.drawImage(IMG, 0, 0, resizeW, -resizeH)
+              } else {
+                canvas.width = resizeW;
+                canvas.height = resizeH;
+                cxt.drawImage(IMG, 0, 0, resizeW, resizeH)
+              }
+              //base64,最终输出的压缩文件
+              self.base64 = canvas.toDataURL('image/jpeg',maxSize.level);
+              self.num+=1;
+              self.imgType=0;
+              self.img_loading=false;
+              self.myImageShow=true;
+              self.myTitleImage.push(self.base64)
+            }
+          };
+        }
+      },
       onRead(file) {
         if (this.myImages.length==9) {
           Dialog.alert({
@@ -155,6 +259,7 @@
         // console.log(this.myTitleImage)
         this.myImageShow=true;
         this.myTitleImage.push(file.content)
+        // alert(this.myTitleImage)
       },
       deleteTag(index) {
         this.myTag.splice(index,1)

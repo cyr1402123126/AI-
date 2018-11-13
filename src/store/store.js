@@ -20,7 +20,7 @@ export const store = new Vuex.Store({
     newTags:[],
     myTag:'选择跟进常用语',
     //标签页面保存自定义标签
-    tags:['莫泊桑'],
+    tags:[{id: '莫泊桑'}],
     //客户详情标签
     customerTags: ['添加标签','添加标签','添加标签'],
     //通讯录底边栏激活

@@ -21,14 +21,14 @@
         <li>
           <p class="left">性别</p>
           <van-radio-group v-model="sex">
-            <van-radio name="1">男</van-radio>
-            <van-radio name="2">女</van-radio>
+            <van-radio name="0">男</van-radio>
+            <van-radio name="1">女</van-radio>
           </van-radio-group>
         </li>
-        <li>
+        <router-link :to="{name:'addTags'}" tag="li">
           <p class="left">标签</p>
           <p class="right">共<span>{{ tags }}</span>个<img src="@/assets/images/icons_right.png" style="width: .25rem;height: .4rem;margin: 0 0 0.05rem .25rem;" alt=""></p>
-        </li>
+        </router-link>
         <li>
           <p class="left">备注手机</p>
           <input type="number" placeholder="未填写" v-model="phone">
@@ -81,7 +81,7 @@
         remarkName: '',
         company: '',
         major: '',
-        sex: '1',
+        sex: '0',
         phone: '',
         email: '',
         address: '',
@@ -94,11 +94,28 @@
         maxDate: new Date(),
         minDate: new Date(1950, 1, 1),
         currentDate: new Date(1993, 6, 7),
-        birthDay:''
       }
     },
     created() {
       this.$store.commit('getAddressActive',0);
+      this.axios.post('customer_detail.php?type=customer_detail&token=af79028c6574ed3b6359b74ab0112796&category=customer',{
+        customer_id: this.$route.params.id
+      }).then(res=>{
+        let data = res.data;
+        this.name = data.wechat;
+        this.remarkName = data.name;
+        this.company = data.company;
+        this.major = data.major;
+        this.sex = data.sex;
+        this.phone = data.remarkPhone;
+        this.email = data.email;
+        this.address = data.where;
+        this.birthDay = data.birthDay;
+        this.discuss = data.remark;
+        this.checked = data.is_send_msg;
+        this.tags = data.tag;
+        console.log(res.data);
+      })
     },
     methods: {
       getBirthDay() {
@@ -114,6 +131,24 @@
         this.show=false;
       },
       save() {
+        let data = {
+          customer_id: this.$route.params.id,
+          name: this.remarkName,
+          company: this.company,
+          major: this.major,
+          sex: this.sex,
+          remarkPhone: this.phone,
+          email: this.email,
+          where: this.address,
+          birthday: this.birthDay,
+          remark: this.discuss,
+          is_send_msg: this.checked,
+          tags: this.tags
+        };
+        this.axios.post('customer_detail.php?type=customer_detail&token=af79028c6574ed3b6359b74ab0112796&category=edit_customer',data)
+          .then(res=>{
+            console.log(res.data);
+          })
         if (this.beforeSbmit()) {
           this.$toast('保存成功');
           this.$router.go(-1);

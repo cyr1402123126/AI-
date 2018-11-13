@@ -54,9 +54,6 @@ export default new Router({
         {path: '/me', name: 'me', component: Me,meta:{title:"我"}},
 
 
-        //我的
-        {path:'/me/myself',name:'myself',component:Myself,meta:{title:"我的动态"}},
-
       ]},
     // {path:'/',name:'meVedio',component:List,meta:{title:"视频"}},
     {path:'/me/list/mePerson',name:'mePerson',component:MePerson,meta:{title:"编辑名片"}},
@@ -72,7 +69,8 @@ export default new Router({
     {path:'/address/:id/add',name:'add',component:Add,meta:{title:"跟进"}},
     {path:'/address/:id/addTags',name:'addTags',component:AddTags,meta:{title:"标签"}},
 
-
+    //我的
+    {path:'/me/myself',name:'myself',component:Myself,meta:{title:"我的动态"}},
     //意见列表
     {path:'/me/suggest',name:'suggest',component:suggest,meta:{title:"意见反馈"}},
     //意见提交

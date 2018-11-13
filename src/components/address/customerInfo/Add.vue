@@ -67,10 +67,8 @@
     },
     created() {
       this.newTags = this.$store.state.newTags;
-      // this.Tag = this.$store.state.myTag;
-    },
-    created() {
       this.$store.commit('getAddressActive',2);
+      // this.Tag = this.$store.state.myTag;
     },
     watch: {
       discuss(val) {
@@ -96,11 +94,12 @@
         this.show=false;
       },
       confirm() {
+        console.log(this.tag);
         if (this.tag == '') {
           this.$toast('输入的标签不能为空');
           this.show=true;
         }else {
-          // this.myTag.unshift(this.tag);
+          this.myTag.unshift(this.tag);
           this.show=false;
           this.$store.commit('saveTag',this.tag)
         }
