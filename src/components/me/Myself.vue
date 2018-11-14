@@ -2,7 +2,7 @@
     <div class="myself">
       <div class="myself-top clearfix">
         <div class="left myself-img">
-          <img :src="info.src" alt="">
+          <img :src="info.src" alt=""  @click="alertImage(info.src)">
         </div>
         <div class="left top-content">
           <div class="myself-name clearfix"><span class="left">{{ info.name }} | {{info.major  }} </span></div>
@@ -50,6 +50,7 @@
 </template>
 
 <script>
+  import { ImagePreview } from 'vant';
   export default {
     name: "Myself",
     data() {
@@ -96,6 +97,14 @@
     methods:{
       onRead(){
         this.$router.push({ path: '/work/edit'});
+      },
+      alertImage(data) {
+        ImagePreview({
+          images: [
+            data
+          ],
+          showIndex: false
+        });
       }
     }
   }
@@ -114,10 +123,15 @@
   }
   .myself-top .myself-img{
     width: 1.6rem;
+    height: 1.6rem;
+    border-radius: 50%;
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
   }
   .myself-top .myself-img img{
     width: 1.6rem;
-    height: 1.6rem;
+    height:100%;
     border-radius: 50%;
   }
   .myself-top .myself-name{

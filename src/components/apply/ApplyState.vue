@@ -11,7 +11,7 @@
         <div class="applyState-content clearfix" v-for="(item,index) in state" :key="index">
           <div class="person" v-if="item.type==2">
             <div class="left">
-              <img :src="item.avatarImg" alt="">
+              <img :src="item.avatarImg" alt="" @click="alertImage([item.avatarImg],0)">
             </div>
             <div class="applyState-cicle">
               <h3>{{ item.firstName }}</h3>
@@ -209,9 +209,19 @@
   .person>.left,.company>.left {
     width: 1.25rem;
   }
-  .spacily-small img {
+  .person>.left {
+    width: 1.25rem;
+    height: 1.25rem;
+    display: table-cell;
+    vertical-align: middle;
+    text-align: center;
+    overflow: hidden;
+    border-radius: 50%;
+  }
+  .person>.left img {
     width: 1.25rem!important;
-    height: auto!important;
+    height: 100%!important;
+    border-radius: 50%;
   }
   .applyState-content .images-small img {
     border-radius: 50%;
@@ -223,7 +233,7 @@
   .applyState-cicle .applyState-images img {
     width: 2.3rem;
     height: 2.3rem;
-    margin: .12rem .12rem .12rem 0;
+    margin: .12rem .32rem .32rem 0;
 
   }
   h3 {

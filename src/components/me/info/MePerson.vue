@@ -8,7 +8,7 @@
       <span class="addMain">
         <ul>
           <li v-for="(item,index) in myTitleImage" :key="index" v-show="myImageShow">
-            <img :src="item" alt="" class="addPic">
+            <img :src="item" alt="" class="addPic" @click="alertImage([item],0)">
             <img src="@/assets/images/me_close.png" alt="" @click="deleteMyImage(index)">
           </li>
           <li class="ios" style="width: 2.9rem;margin-top: .5rem;" v-show="!myImageShow" v-if="isIos">
@@ -71,7 +71,7 @@
       <span class="addMain">
         <ul>
           <li v-for="(item,index) in myImages" :key="index">
-            <img :src="item" alt="" class="addPic">
+            <img :src="item" alt="" class="addPic" @click="alertImage(myImages,index)">
             <img src="@/assets/images/me_close.png" alt="" @click="deleteImage(index)">
           </li>
           <li style="width: 2.9rem;margin-top: 0;">
@@ -107,7 +107,7 @@
 </template>
 
 <script>
-  import { Dialog,Toast } from 'vant';
+  import { Dialog,Toast,ImagePreview } from 'vant';
   import EXIF from 'exif-js'
   export default {
     data(){
@@ -156,7 +156,6 @@
       }
     },
     methods:{
-
       test1(e) {
         let that=this;
         let inputDOM = this.$refs.inputer;
@@ -168,6 +167,14 @@
             that.Orientation = EXIF.getTag(this, 'Orientation');
           });
         }
+      },
+      alertImage(img,index) {
+        console.log(img);
+        ImagePreview({
+          images: img,
+          showIndex: false,
+          startPosition:index
+        });
       },
       imgPreview (file) {
         //base64 格式
@@ -276,9 +283,16 @@
           // on cancel
         });
       },
-      deleteImage(index) {
-        console.log(index);
-        this.myImages.splice(index,1)
+      deleteImage(index) {sexDetailsexDetail
+        this.$dialog.confirm({
+          title: '',
+          message: '你确定要删除吗?'
+        }).then(() => {
+          this.myImages.splice(index,1)
+          // on confirm
+        }).catch(() => {
+          // on cancel
+        });
       },
       addTag() {
         this.username='';

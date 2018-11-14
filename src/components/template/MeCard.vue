@@ -2,7 +2,9 @@
 
   <div class="card-box">
     <div class="card-top clearfix">
-      <img class="left" :src="cardInfo.src" alt="">
+      <div class="left img">
+        <img :src="cardInfo.src" alt="" @click="alertImage(cardInfo.src)">
+      </div>
       <div class="left card-name">
         <p>{{ cardInfo.name }} 丨{{ cardInfo.major }}</p>
         <p>{{ cardInfo.company }}</p>
@@ -19,6 +21,7 @@
 </template>
 
 <script>
+  import { ImagePreview } from 'vant';
   export default {
     name: "MeCard",
     data() {
@@ -41,7 +44,17 @@
         }*/
       }
     },
-    props:['cardInfo']
+    props:['cardInfo'],
+    methods: {
+      alertImage(data) {
+        ImagePreview({
+          images: [
+            data
+          ],
+          showIndex: false
+        });
+      }
+    }
   }
 </script>
 
@@ -57,10 +70,18 @@
     box-sizing: border-box;
     box-shadow: 0.1rem 0.1rem 0.2rem rgba(0,0,0,.2);
   }
-  .card-top img {
+  .card-top .img {
     width: 1.8rem;
     height: 1.8rem;
     border-radius: 50%;
+    overflow: hidden;
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
+  }
+  .card-top img {
+    width: 100%;
+    height:100%;
   }
   .card-top .card-name {
     margin-left: .2rem;

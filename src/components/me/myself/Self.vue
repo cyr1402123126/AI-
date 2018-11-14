@@ -3,7 +3,7 @@
   <div id="applyState">
     <div class="applyState-content clearfix" v-for="(item,index) in state" :key="index">
       <div class="left">
-        <img :src="item.src" alt="">
+        <img :src="item.src" alt="" @click="alertImage(item.src)">
       </div>
       <div class="applyState-cicle">
         <h3>{{ item.person }}</h3>
@@ -65,7 +65,7 @@
   // import vueEmoji from '../../components/public/emoji.vue'
   import facePng from '@/assets/images/face.png'
   import keyPng from '@/assets/images/key.png'
-  import { Toast } from 'vant';
+  import { Toast,ImagePreview } from 'vant';
   export default {
     name: "Self",
     data() {
@@ -236,6 +236,14 @@
         res.data.state.comment=arr
         // console.log(res.data.state.person);
         this.state=[res.data.state];
+      },
+      alertImage(data) {
+        ImagePreview({
+          images: [
+            data
+          ],
+          showIndex: false
+        });
       }
     },
     created(){
@@ -335,8 +343,15 @@
   }
   .applyState-content>.left {
     width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    text-align: center;
+    display: table-cell;
+    vertical-align: middle;
   }
   .applyState-content>.left img {
+    width: 1.25rem;
+    height:100%;
     border-radius: 50%;
   }
   .applyState-cicle {
@@ -346,7 +361,7 @@
   .applyState-cicle .applyState-images img {
     width: 2.3rem;
     height: 2.3rem;
-    margin: .12rem .12rem .12rem 0;
+    margin: .12rem .32rem .32rem 0;
 
   }
   h3 {

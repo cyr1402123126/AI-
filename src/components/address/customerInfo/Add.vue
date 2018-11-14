@@ -68,7 +68,6 @@
     created() {
       this.newTags = this.$store.state.newTags;
       this.$store.commit('getAddressActive',2);
-      // this.Tag = this.$store.state.myTag;
     },
     watch: {
       discuss(val) {
@@ -99,7 +98,7 @@
           this.$toast('输入的标签不能为空');
           this.show=true;
         }else {
-          this.myTag.unshift(this.tag);
+          // this.myTag.unshift(this.tag);
           this.show=false;
           this.$store.commit('saveTag',this.tag)
         }
@@ -116,11 +115,19 @@
         }
       },
       deleteTag(item,index) {
-        this.flag=false;
-        this.isShow=true;
-        this.Tag = this.Tag == item ? '客户查看了公司产品，有合作意向' : this.Tag;
-        this.$store.commit('selectTag','客户查看了公司产品，有合作意向');
-        this.$store.commit('deleteTag',index)
+        this.$dialog.confirm({
+          title: '',
+          message: '你确定要删除吗?'
+        }).then(() => {
+          this.flag=false;
+          this.isShow=true;
+          this.Tag = this.Tag == item ? '客户查看了公司产品，有合作意向' : this.Tag;
+          this.$store.commit('selectTag','客户查看了公司产品，有合作意向');
+          this.$store.commit('deleteTag',index)
+          // on confirm
+        }).catch(() => {
+          // on cancel
+        });
       },
       alertTag() {
         this.showImg = !this.showImg;
@@ -130,6 +137,14 @@
         if (this.discuss.length == 0) {
           this.$toast('描述内容不能为空')
         }else {
+          this.axios.post('customer_detail.php?type=customer_detail&token=af79028c6574ed3b6359b74ab0112796&category=follow_up',{
+            customer_id: this.$route.params.id,
+            content: this.discuss
+          }).then(res => {
+
+          }).catch(err =>{
+            console.log(err);
+          })
           this.$toast('跟进成功')
           this.$router.go(-1);
         }

@@ -36,7 +36,7 @@
           <van-tab title="互动">
             <!--style="height:8.8rem"-->
             <VueBetterScroll
-              style="height:8rem"
+              style="height:45vh"
               class="wrapper"
               ref="scroll">
               <div class="action">
@@ -103,13 +103,13 @@
           </van-tab>
         </van-tabs>
       </div>
-<!--      &lt;!&ndash;底部栏&ndash;&gt;
+      <!--底部栏-->
       <van-tabbar v-model="active1">
         <van-tabbar-item icon="records" :to="{name:'compile'}">编辑资料</van-tabbar-item>
         <van-tabbar-item icon="chat" :to="{name:'chat',params:{staff_id:staff_id,customer_id:$route.params.id}}">发消息</van-tabbar-item>
-        &lt;!&ndash;<van-tabbar-item icon="chat" :to="{name:'chat',params:{staff_id:item.staff_id,customer_id:item.customer_id}}">发消息</van-tabbar-item>&ndash;&gt;
+        <!--<van-tabbar-item icon="chat" :to="{name:'chat',params:{staff_id:item.staff_id,customer_id:item.customer_id}}">发消息</van-tabbar-item>-->
         <van-tabbar-item icon="shop" :to="{name:'add'}">添加跟进</van-tabbar-item>
-      </van-tabbar>-->
+      </van-tabbar>
 
       <!--选择比例-->
       <van-popup v-model="percentageShow" position="bottom" :overlay="true">
@@ -279,7 +279,6 @@
       },
       percentageConfirm(picker, value, index) {
         // Toast(`当前值：${value}, 当前索引：${index}`);
-        console.log(picker);
         this.look.top.percentage=picker;
         this.axios.post('customer_detail.php?type=customer_detail&token=af79028c6574ed3b6359b74ab0112796&category=edit_plan_rate',{
           plan_rate: this.look.top.percentage,
@@ -305,12 +304,10 @@
         month = month < 10 ? ('0'+month) : month;
         day = day < 10 ? ('0'+day) : day;
         this.look.top.time=val.getFullYear() + '-' + month + '-' + day;
-        console.log(this.look.top.time);
         this.axios.post('customer_detail.php?type=customer_detail&token=af79028c6574ed3b6359b74ab0112796&category=edit_plan_time',{
           plan_time: this.look.top.time,
           customer_id: this.$route.params.id
         }).then(res=>{
-          console.log(res.data);
           this.look.action.unshift(res.data.data)
           this.dateShow=false;
         })
@@ -430,9 +427,13 @@
         p:nth-child(2) {
           margin-top: .3rem;
           span {
-            color: #999999;
-            font-size: .32rem;
-            border: 1px solid #999999;
+            display: inline-block;
+            min-width: 1rem;
+            max-width: 2rem;
+            text-align: center;
+            color: #ffbb02;
+            font-size: .26rem;
+            border: 1px solid #ffbb02;
             border-radius: .27rem;
             padding: .07rem .2rem;
             margin-right: .2rem;

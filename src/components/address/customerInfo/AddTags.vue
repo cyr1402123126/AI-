@@ -10,7 +10,7 @@
       <div class="wraper">
         <div class="title"><span class="purple"></span>{{ other.title }}</div>
         <ul class="list end">
-          <li :class="{purple:item.show}" v-for="(item,index) in other.list" :key="index" @click="showPurple(item,$event)">{{ item.id }}</li>
+          <li :class="{purple:item.show}" v-for="(item,index) in other.list" :key="index" @click="showPurple(item,$event)">{{ item.name }}</li>
           <li class="left" style="font-size: .6rem" @click="addTag">+</li>
         </ul>
       </div>
@@ -84,7 +84,7 @@
     data() {
       return {
         list: [
-          {
+          /*{
             color: 'green',
             title: '基本信息',
             list: [
@@ -133,12 +133,12 @@
             list :[
               {name: '已付全款',id: 34,class: 'purple',show: true},{name: '已支付首付款',id: 35,class: 'purple',show: false},{name: '已支付尾款',id: 36,class: 'purple',show: false},{name: '未付全款',id: 37,class: 'purple',show: false},{name: '未支付首付款',id: 38,class: 'purple',show: false},{name: '未支付尾款',id: 39,class: 'purple',show: false}
             ]
-          },
+          },*/
         ],
         other: {
           title: '其他',
           list: [
-            {name: '已付全款',id: 34,show: true}
+            // {name: '已付全款',id: 34,show: true}
           ]
         },
 
@@ -149,20 +149,20 @@
         lock:false,
         tag:'',
         //把添加到数组
-        arr: []
+        arr: [],
+        customer_id: this.$route.params.id
       }
     },
     created() {
-      /*console.log(this.$store.state.tags);
-      this.other = this.$store.state.tags;
-      let arr = [1,46];
-      this.base.forEach((value,index)=>{
-        this.arr.forEach((item,count)=>{
-          if (value.id == item) {
-            this
-          }
-        })
-      })*/
+      // this.other.list = this.$store.state.tags;
+      this.axios.post('customer_detail.php?type=customer_detail&token=af79028c6574ed3b6359b74ab0112796&category=label_list',{
+        customer_id: this.customer_id
+      }).then(res => {
+        this.list = res.data.list;
+        this.other = res.data.other;
+        this.arr = res.data.arr;
+        console.log(res.data);
+      })
     },
     methods: {
       showGreen(data,e) {
@@ -201,8 +201,8 @@
           this.arr.push(data.id);
           data.show = true;
         }
-        console.log(this.arr);
-        console.log(data.show);
+        // console.log(this.arr);
+        // console.log(data.show);
       },
       addTag() {
         this.tag='';
@@ -216,7 +216,7 @@
         }
       },
       done() {
-        this.other.push({id: this.tag})
+        this.other.push({name: '已付全款',id: this.tag,show: false})
         this.show=false;
       },
       confirm() {
@@ -225,12 +225,25 @@
           this.show=true;
         }else {
           // this.other.push(this.tag);
-          this.show=false;
-          this.$store.commit('addTag',{id: this.tag})
+          this.axios.post('customer_detail.php?type=customer_detail&token=af79028c6574ed3b6359b74ab0112796&category=add_label',{
+            customer_id: this.customer_id,
+            name: this.tag,
+          }).then(res => {
+            this.show=false;
+            this.other.list.push({name: this.tag,id: this.tag,show: false})
+            console.log(res.data);
+          })
+          // this.$store.commit('addTag',{name: this.tag,id: this.tag,show: false})
         }
       },
       save() {
-        this.$router.go(-1)
+        this.axios.post('customer_detail.php?type=customer_detail&token=af79028c6574ed3b6359b74ab0112796&category=edit_label',{
+          label_id: this.arr,
+          customer_id: this.customer_id
+        }).then(res => {
+          this.$toast('保存成功')
+          this.$router.go(-1)
+        })
       }
     }
   }
@@ -267,14 +280,17 @@
         .purple {
           background: #a92dea;
         }
+        .red {
+          background: #e52b27;
+        }
+        .pink {
+          background: #ff59de;
+        }
       }
       .list {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
-        align-content: space-around;
+        overflow: hidden;
         li {
-          flex: 0 0 2.8rem;
+          width: 2.8rem;
           height: .85rem;
           line-height: .85rem;
           margin-bottom: .45rem;
@@ -282,6 +298,11 @@
           text-align: center;
           color: #828186;
           font-size: .36rem;
+          margin-right: .7rem;
+          float: left;
+        }
+        li:nth-child(3n) {
+          margin-right: 0;
         }
         .green {
           background: #e0fbf6;
@@ -298,6 +319,14 @@
         .purple {
           background: #e8eefc;
           color: #8289bf;
+        }
+        .red {
+          background: #f7dedd;
+          color: #f3524f;
+        }
+        .pink {
+          background: #ffdcf8;
+          color: #ff5ddf;
         }
       }
       .end {
@@ -322,15 +351,17 @@
   input[type=button] {
     background: #3b83ff;
     color: #fff;
-    width: 9.7rem;
+    width: 100%;
     display: block;
     height: 1.5rem;
     line-height: 1.5rem;
     text-align: center;
     margin: 0 auto;
     margin-top: .5rem;
-    font-size: .46rem;
-    border-radius: .15rem;
+    font-size: .48rem;
+    position: fixed;
+    bottom: 0;
+    left: 0;
   }
   .van-cell {
     width: 85%;

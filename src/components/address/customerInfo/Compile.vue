@@ -3,7 +3,7 @@
     <div class="list">
       <ul>
         <li>
-          <img class="left" src="@/assets/images/logo.png" alt="">
+          <img class="left" :src="src" alt="">
           <div class="right">{{ name }}</div>
         </li>
         <li>
@@ -77,6 +77,7 @@
     data() {
       return {
         // 信息
+        src: '',
         name:"燕子",
         remarkName: '',
         company: '',
@@ -85,7 +86,7 @@
         phone: '',
         email: '',
         address: '',
-        birthDay: '',
+        birthDay: '44',
         discuss: '',
         checked: false,
         tags:0,
@@ -103,6 +104,7 @@
       }).then(res=>{
         let data = res.data;
         this.name = data.wechat;
+        this.src = data.src;
         this.remarkName = data.name;
         this.company = data.company;
         this.major = data.major;
@@ -110,11 +112,10 @@
         this.phone = data.remarkPhone;
         this.email = data.email;
         this.address = data.where;
-        this.birthDay = data.birthDay;
+        this.birthDay = data.birthday;
         this.discuss = data.remark;
         this.checked = data.is_send_msg;
         this.tags = data.tag;
-        console.log(res.data);
       })
     },
     methods: {
