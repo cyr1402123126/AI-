@@ -283,17 +283,6 @@
           // on cancel
         });
       },
-      deleteImage(index) {sexDetailsexDetail
-        this.$dialog.confirm({
-          title: '',
-          message: '你确定要删除吗?'
-        }).then(() => {
-          this.myImages.splice(index,1)
-          // on confirm
-        }).catch(() => {
-          // on cancel
-        });
-      },
       addTag() {
         this.username='';
         this.show=true;
