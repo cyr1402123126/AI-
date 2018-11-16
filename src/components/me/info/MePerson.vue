@@ -330,7 +330,18 @@
             Toast('保存成功');
             this.$router.push('/me/list')
           })
-      }
+      },
+      deleteImage(index) {
+        this.$dialog.confirm({
+          title: '',
+          message: '你确定要删除吗?'
+        }).then(() => {
+          this.myImages.splice(index,1)
+
+        }).catch(() => {
+
+        });
+      },
     }
   }
 </script>

@@ -55,7 +55,7 @@
         <!--<textarea v-autosize v-model="content.replace(/\#[\u4E00-\u9FA5]{1,3}\;/gi, emotion)" ref="focus" @input="changeText" @click="changeEmotion" style="max-height: 150px;resize:none;width: 8.5rem;outline: none;border: 1px solid #92a5b4;padding:.2rem .1rem .1rem .1rem;box-sizing: border-box;margin-left: .2rem">
 
         </textarea>-->
-        <textarea ref="focus" v-autosize v-model="content" @input="changeText" @click="changeEmotion" style="max-height: 150px;resize:none;width: 7.5rem;outline: none;border: 1px solid #92a5b4;padding:.2rem .1rem .1rem .1rem;box-sizing: border-box;margin-left: .2rem">
+        <textarea ref="focus" v-autosize v-model="content" @input="changeText" @click="changeEmotion($event)" style="max-height: 150px;resize:none;width: 7.5rem;outline: none;border: 1px solid #92a5b4;padding:.2rem .1rem .1rem .1rem;box-sizing: border-box;margin-left: .2rem">
 
         </textarea>
         <div>
@@ -158,7 +158,7 @@
         count:0,
         file:'',
         isLoading: false,
-        page:1
+        page:2
       }
     },
     components:{
@@ -170,7 +170,8 @@
       this.scrollBottom();
       setTimeout(()=>{
         console.log(this.$refs.scrollBottom.scrollTop);
-        newArr.push(this.$refs.scrollBottom.scrollTop)
+        newArr.push(this.$refs.scrollBottom.scrollHeight);
+        console.log(newArr);
       },100)
 
     },
@@ -204,7 +205,6 @@
           this.isLoading = false;
           this.count++;
           this.page++;
-          console.log(page);
           let staff_id=this.$route.params.staff_id;
           let customer_id=this.$route.params.customer_id;
           this.axios.post('message_log.php?type=message_log&token=e0792bac703b86407557d786ed5546da',{
@@ -214,21 +214,16 @@
             obj:2,
           }).then(res=>{
             let data=res.data.data;
-            data.forEach(val=>{
-              this.arr.unshift(val)
-
-              // console.log(newArr);
-
-            })
+            console.log(data);
+            this.arr = data.concat(this.arr);
             let two=this.$refs.testHeight.offsetHeight;
             let ele=this.$refs.scrollBottom;
-            console.log(two);
-            newArr.push(this.$refs.testHeight.offsetHeight)
+            newArr.push(two);
 
             /*console.log(two);
             console.log(newArr[newArr.length-2]);*/
             console.log(newArr);
-            if (page == 1) {
+            if (page == 2) {
               console.log(newArr);
               ele.scrollTop = newArr[1];
               console.log(newArr[1]);
@@ -277,6 +272,7 @@
         setTimeout(()=>{
           let ele=this.$refs.scrollBottom;
           ele.scrollTop = ele.scrollHeight;
+          // console.log(ele.scrollTop);
         },100)
       },
       hideEmotion() {
@@ -306,8 +302,14 @@
         }
         this.count++;
       },
-      changeEmotion() {
+      changeEmotion(e) {
+        // alert(this.$refs.scrollBottom.scrollTop);
+        // e.target.scrollIntoView(false);
+        // e.target.scrollIntoViewIfNeeded();
         let dom=this.$refs.fixed;
+        setTimeout(() => {
+          e.target.scrollIntoView(true);
+        },200)
         if (this.count >= 1) {
           this.isShow=false;
           dom.className='Input clearfix moveOut';

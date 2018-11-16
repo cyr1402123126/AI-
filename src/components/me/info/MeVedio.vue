@@ -15,19 +15,23 @@
           <video ref="play" :src="video" controls="controls">
             对不起，你的浏览器版本过低，请更换浏览器
           </video>
-          <img v-show="play" class="selectImg" :src="test" alt="">
-          <img v-show="play" src="@/assets/images/play.png" alt="" class="play" @click="autoplay">
+          <img v-show="play" class="selectImg" :src="backgroundImage" alt="">
+          <div class="play" v-show="play">
+            <img src="@/assets/images/play.png" alt="" class="show-play" @click="autoplay">
+          </div>
           <img src="@/assets/images/me_close.png" alt="" @click="close">
         </div>
       </div>
       <div class="clearfix">
-        <button @click="startCrop" class="startCrop">上传视频封面</button>
-        <button @click="deleteCrop" class="deleteCrop">删除封面</button>
+        <button v-show="uploadPage" @click="startCrop" class="startCrop">上传视频封面</button>
+        <button v-show="deletePage" @click="deleteCrop" class="deleteCrop">删除封面</button>
       </div>
       <input type="button" value="保存" @click="save">
     </div>
     <div class="background" v-show="showBackground">
-      <div class="border"></div>
+      <div class="border">
+        <img :src="backgroundImage" alt="">
+      </div>
       <div class="size">尺寸 : 347 × 181</div>
       <div class="upload">
         <button>选择图片</button>
@@ -45,13 +49,18 @@
         :autoCropWidth="example3.autoCropWidth"
         :autoCropHeight="example3.autoCropHeight"
         :fixedBox="example3.fixedBox"
+        :canMoveBox="example3.canMoveBox"
+        :mixImgSize="example3.mixImgSize"
+        :centerBox="example3.centerBox"
       ></vueCropper>
-      <button class="select" @click="getPicture">选择图片</button>
-      <file-base64
-        v-bind:multiple="true"
-        v-bind:done="getPicture">
-      </file-base64>
-      <button class="sure" @click="finish">确定</button>
+      <div class="bottom-color">
+        <button class="select" @click="getPicture">选择图片</button>
+        <file-base64
+          v-bind:multiple="true"
+          v-bind:done="getPicture">
+        </file-base64>
+        <button class="sure" @click="finish">确定</button>
+      </div>
       <!--<input type="button" value="上传" style="position: fixed;bottom: 0;left: 0;" @click="finish()">-->
     </div>
   </div>
@@ -72,14 +81,22 @@
         showBackground:false,
         showSelect:false,
         play:false,
-        test:'',
+        backgroundImage:'',
+        hasSelect: '',
+        uploadPage:false,
+        deletePage:false,
+        saveImage: '',
+        saveVideo: '',
 
         example3: {
           img: require("@/assets/images/test.png"),
           autoCrop: true,
           autoCropWidth: 347,
           autoCropHeight: 181,
-          fixedBox: true
+          fixedBox: true,
+          canMoveBox: false,
+          centerBox: true,
+          mixImgSize: 347
         }
       }
     },
@@ -88,12 +105,19 @@
       VueCropper
     },
     created() {
-      this.$store.commit('getActive',4)
+      this.showPage();
+      this.$store.commit('getActive',4);
       this.axios.get('https://mp.wedotop.com/Api/synopsis.php?type=video&token=09b766ba978f601b475b86142c4ab841&get_video=1')
         .then(res => {
           console.log(res.data);
-          this.flag = res.data.path == '' ? true : false;
-          this.video = res.data.path;
+          let data = res.data;
+          this.flag = data.path == '' ? true : false;
+          this.video = data.path;
+          this.backgroundImage = data.video_cover;
+          this.videoPath = data.path;
+          this.play = this.backgroundImage ? true :false;
+          this.showPage();
+          // console.log(this.backgroundImage);
         })
     },
     methods:{
@@ -118,21 +142,29 @@
         this.showSelect = false;
       },
       finish() {
-        /*this.$refs.cropper.getCropData((data) => {
-          console.log(data);
-          this.test = data;
-          this.show = !this.show;
-          // test.location.href = data
-        })*/
         this.play = true;
         this.show = true;
         this.showBackground = false;
         this.showSelect = false;
-        this.$refs.cropper.getCropBlob((data) => {
+        /*this.$refs.cropper.getCropBlob((data) => {
           let downImg = window.URL.createObjectURL(data);
-          this.test = downImg;
+          this.backgroundImage = downImg;
+          this.showPage();
           console.log(downImg);
+        })*/
+        this.$refs.cropper.getCropData((data) => {
+          this.backgroundImage = data;
+          this.showPage();
+          this.axios.post('synopsis.php?type=video&token=09b766ba978f601b475b86142c4ab841',{
+            video_cover: this.backgroundImage
+          }).then(res => {
+            this.saveImage = res.data.path;
+
+            console.log(res.data.path);
+            // this.backgroundImage = res.data.path;
+          })
         })
+
 
         /*if (window.navigator.msSaveBlob) {
           var blobObject = new Blob([data]);
@@ -148,12 +180,20 @@
         this.$refs.play.play();
       },
       deleteCrop() {
-        this.play = false;
+        this.$dialog.confirm({
+          title: '',
+          message: '你确定要删除吗?'
+        }).then(() => {
+          this.backgroundImage = '';
+          this.play = false;
+          this.showPage();
+        }).catch(() => {
+        });
       },
 
 
       getFiles(files){
-        var reg = /[.](3gpp|mp2|mp3|mp4|mpeg|mpg|MP4)$/.test(files[0].name);
+        var reg = /[.](3gpp|mp2|mp3|mp4|mpeg|mpg|MP4|3GP|3GPP|RM|RMVB|AVI|WMV|MOV)$/.test(files[0].name);
         if (parseInt(files[0].size) < 10000) {
           this.$toast.loading({
             mask: true,
@@ -164,15 +204,16 @@
             this.video = files[0].base64;
             this.flag = !this.flag;
             this.$toast.clear();
-          },3000)
+            this.showPage();
+          },2000)
         }else {
           this.$toast('上传的视频不能超过10M,请重选')
         }
         if (reg) {
           this.axios.post('synopsis.php?type=video&token=09b766ba978f601b475b86142c4ab841',{
-            upload_video: files[0]
+            upload_video: files[0],
           }).then(res => {
-            this.videoPath = res.data.path;
+            this.saveVideo = res.data.path;
           })
         }else {
           this.flag = true;
@@ -198,27 +239,36 @@
           message: '你确定要删除吗?'
         }).then(() => {
           this.flag=true;
+          this.video = '';
+          this.backgroundImage = '';
+          this.showPage();
         }).catch(() => {
 
         });
 
       },
       save() {
+        console.log(this.saveVideo);
         this.axios.post('synopsis.php?type=video&token=09b766ba978f601b475b86142c4ab841',{
-          video: this.videoPath
+          video: this.saveVideo,
+          video_cover: this.saveImage
         }).then(res => {
           console.log(res.data);
           this.$router.go(-1);
         })
+      },
+      showPage() {
+        this.uploadPage = this.video ? true : false;
+        this.deletePage = this.backgroundImage ? true :false;
       }
     },
   }
 </script>
 
 <style>
-  .van-dialog {
+  /*.van-dialog {
     top: 63%!important;
-  }
+  }*/
   .vue-cropper {
     height: 10rem!important;
     background-image:none!important;
@@ -269,16 +319,24 @@
         top: 0;
       }
       .play {
-        width: 1.45rem;
-        height: 1.45rem;
+        /*width: 1.45rem;
+        height: 1.45rem;*/
+        width: .6rem;
+        padding: .4rem .4rem .4rem .4rem;
         position: absolute;
         left: 43%;
         top: 33%;
         /*top: 51%;*/
-        box-shadow: 1px 1px 1px #efefef;
+        background: rgba(0,0,0,.8);
+        display: table-cell;
+        vertical-align: middle;
+        text-align: center;
         border-radius: 50%;
+        .show-play {
+          margin-left: .05rem;
+        }
       }
-      img {
+      img:not(.show-play):not(.selectImg) {
         position: absolute;
         right: -.25rem;
         top: -.25rem;
@@ -316,7 +374,7 @@
   .cropper {
     .select,.sure,input[type=file] {
       position: fixed;
-      bottom: 1.55rem;
+      bottom: .35rem;
       left: 15%;
       width: 2.7rem;
       border: 1px solid #fff;
@@ -336,6 +394,13 @@
       right: 15%;
       background: #3e84ff;
       border: 1px solid #3e84ff;
+    }
+    .bottom-color {
+      width: 100%;
+      background: rgba(0,0,0,.5);
+      position: fixed;
+      bottom: 0;
+      height: 1.8rem;
     }
   }
   .background {

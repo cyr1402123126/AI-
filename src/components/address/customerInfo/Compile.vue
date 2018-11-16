@@ -25,7 +25,7 @@
             <van-radio name="1">女</van-radio>
           </van-radio-group>
         </li>
-        <router-link :to="{name:'addTags'}" tag="li">
+        <router-link :to="{name:'compile'}" tag="li">
           <p class="left">标签</p>
           <p class="right">共<span>{{ tags }}</span>个<img src="@/assets/images/icons_right.png" style="width: .25rem;height: .4rem;margin: 0 0 0.05rem .25rem;" alt=""></p>
         </router-link>
