@@ -19,6 +19,7 @@
           {name:"名片海报",route:"mePoster"},
           {name:"个人简介/语音/标签/图片",route:"mePerson"},
           {name:"视频",route:"meVedio"},
+          // {name:"语音",route:"meAudio"},
         ]
       }
     },

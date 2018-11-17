@@ -22,6 +22,7 @@ const MePerson =()=>import('@/components/me/info/MePerson')
 const MePoster =()=>import('@/components/me/info/MePoster')
 const MeStyle =()=>import('@/components/me/info/MeStyle')
 const MeVedio =()=>import('@/components/me/info/MeVedio')
+const MeAudio =()=>import('@/components/me/info/MeAudio')
 const Card =()=>import('@/components/me/Info')
 // const HomeInfo =()=>import('@/components/home/info/Info')
 const LookCard =()=>import('@/components/home/look/LookCard')
@@ -38,7 +39,6 @@ const Chat =()=>import('@/components/chat/Chat')
 Vue.use(Router)
 
 export default new Router({
-  // mode:"history",
   scrollBehavior(to, from, savedPosition) {
     return {x: 0, y: to.meta.savedPosition || 0};
   },
@@ -92,6 +92,7 @@ export default new Router({
     {path:'/me/list/mePoster',name:'mePoster',component:MePoster,meta:{title:"名片海报"}},
     {path:'/me/list/meStyle',name:'meStyle',component:MeStyle,meta:{title:"名片样式"}},
     {path:'/me/list/meVedio',name:'meVedio',component:MeVedio,meta:{title:"视频"}},
+    {path:'/me/list/meAudio',name:'meAudio',component:MeAudio,meta:{title:"语音"}},
     {path:'/me/card',name:'card',component:Card,meta:{title:"我的名片"}},
   ]
 })

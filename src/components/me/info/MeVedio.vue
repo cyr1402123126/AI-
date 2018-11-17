@@ -76,7 +76,7 @@
         flag:true,
         // video: require('@/assets/video/test.mp4'),
         video: '',
-        videoPath:'',
+        // videoPath:'',
         show: true,
         showBackground:false,
         showSelect:false,
@@ -107,17 +107,19 @@
     created() {
       this.showPage();
       this.$store.commit('getActive',4);
-      this.axios.get('https://mp.wedotop.com/Api/synopsis.php?type=video&token=09b766ba978f601b475b86142c4ab841&get_video=1')
+      this.axios.get('synopsis.php?type=video&token=09b766ba978f601b475b86142c4ab841&get_video=1')
         .then(res => {
           console.log(res.data);
           let data = res.data;
-          this.flag = data.path == '' ? true : false;
-          this.video = data.path;
-          this.backgroundImage = data.video_cover;
-          this.videoPath = data.path;
+          this.saveVideo = data.video;
+          this.saveImage = data.video_cover;
+          this.video = data.video_path;
+          this.backgroundImage = data.video_cover_path;
+          // this.videoPath = data.video_path;
+          this.flag = data.video_path == '' ? true : false;
           this.play = this.backgroundImage ? true :false;
+          // this.flag = this.backgroundImage ||  this.video ? false :true;
           this.showPage();
-          // console.log(this.backgroundImage);
         })
     },
     methods:{
@@ -184,6 +186,7 @@
           title: '',
           message: '你确定要删除吗?'
         }).then(() => {
+          this.saveImage = '';
           this.backgroundImage = '';
           this.play = false;
           this.showPage();
@@ -239,6 +242,8 @@
           message: '你确定要删除吗?'
         }).then(() => {
           this.flag=true;
+          this.saveImage = '';
+          this.saveVideo = '';
           this.video = '';
           this.backgroundImage = '';
           this.showPage();
@@ -254,6 +259,7 @@
           video_cover: this.saveImage
         }).then(res => {
           console.log(res.data);
+          this.$toast('保存成功')
           this.$router.go(-1);
         })
       },
@@ -266,9 +272,9 @@
 </script>
 
 <style>
-  /*.van-dialog {
-    top: 63%!important;
-  }*/
+  .van-dialog {
+    top: 53%!important;
+  }
   .vue-cropper {
     height: 10rem!important;
     background-image:none!important;
