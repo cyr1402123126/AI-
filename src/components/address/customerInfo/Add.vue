@@ -12,6 +12,7 @@
         </ul>
       </div>
       <div class="content" v-else-if="!isShow">
+        <p class="discuss" @click="showState">跟进状态: <span style="margin-left: .3rem;color: #4a4a4a;">{{ state }}</span></p>
         <p class="discuss">跟进描述</p>
         <textarea v-autosize placeholder="在这里输入跟进语" v-model="discuss"></textarea>
         <span>{{ discuss.length }}/500</span>
@@ -34,6 +35,17 @@
           placeholder="输入自定义标签"
         />
       </van-dialog>
+
+      <!--状态选择器-->
+      <van-popup v-model="showStatus" position="bottom" :overlay="true">
+        <van-picker
+          show-toolbar
+          title=""
+          :columns="columns"
+          @cancel="onCancel"
+          @confirm="onConfirm"
+        />
+      </van-popup>
     </div>
 </template>
 
@@ -42,6 +54,11 @@
     name: "Add",
     data() {
       return {
+        //添加状态
+        showStatus : false,
+        columns: ['一般客户', '重要客户', '核心客户', '潜在客户','意向客户','流失客户'],
+        state : '请选择',
+
         discuss:'',
         isShow:false,
         myTag:['客户查看了公司产品，有合作意向','标记一下，客户有合作意向','客户多次查看小程序，合作意向强烈','计划近期安排拜访','意向客户，需安排拜访','见面聊过，客户有合作意向','曾拜访过的客户','标记一下，需给客户发送报价','已发报价，待客户反馈','已成交客户，维护好后续关系'],
@@ -67,7 +84,7 @@
     },
     created() {
       this.newTags = this.$store.state.newTags;
-      this.$store.commit('getAddressActive',2);
+      this.$store.commit('getAddressActive',3);
     },
     watch: {
       discuss(val) {
@@ -134,21 +151,36 @@
         this.isShow =! this.isShow;
       },
       save() {
-        if (this.discuss.length == 0) {
+        if (this.state == '请选择') {
+          this.$toast('跟进状态不能为空')
+        }else if (this.discuss.length == 0) {
           this.$toast('描述内容不能为空')
         }else {
-          this.axios.post('customer_detail.php?type=customer_detail&token=af79028c6574ed3b6359b74ab0112796&category=follow_up',{
+          this.axios.post('customer_detail.php?type=customer_detail&token=af79028c6574ed3b6359b74ab0112796&category=follow_up', {
             customer_id: this.$route.params.id,
-            content: this.discuss
+            content: this.discuss,
+            sign: this.state
           }).then(res => {
 
-          }).catch(err =>{
+          }).catch(err => {
             console.log(err);
-          })
-          this.$toast('跟进成功')
+          });
+          this.$toast('跟进成功');
           this.$router.go(-1);
         }
-      }
+      },
+      //客户状态
+      showState() {
+        this.showStatus = true;
+      },
+      onConfirm(value, index) {
+        this.state = value;
+        this.showStatus=false;
+         // Toast(`当前值：${value}, 当前索引：${index}`);
+      },
+      onCancel() {
+        this.showStatus=false;
+      },
     },
   }
 </script>

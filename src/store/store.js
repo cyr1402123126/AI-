@@ -25,7 +25,9 @@ export const store = new Vuex.Store({
     //客户详情标签
     customerTags: ['添加标签','添加标签','添加标签'],
     //通讯录底边栏激活
-    active1:0
+    active1:0,
+    //获取通讯录id
+    addressData : {}
   },
   getters:{
     // 获取属性的状态
@@ -92,6 +94,15 @@ export const store = new Vuex.Store({
     //通讯录底边栏激活
     getAddressActive(state,data) {
       state.active1 = data;
+    },
+    //新建任务获取通讯录id
+    getAddress(state,data) {
+      state.addressData = data;
+    },
+    //新建任务保存多个头像
+    saveAddressImg (state,data) {
+      console.log(state.addressData);
+      state.addressData.customer_ids = data;
     }
 
 

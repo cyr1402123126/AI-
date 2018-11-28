@@ -106,6 +106,7 @@
       <!--底部栏-->
       <van-tabbar v-model="active1">
         <van-tabbar-item icon="records" :to="{name:'compile'}">编辑资料</van-tabbar-item>
+        <van-tabbar-item icon="edit" :to="{name:'task',params:{taskId:'0'}}">新建任务</van-tabbar-item>
         <van-tabbar-item icon="chat" :to="{name:'chat',params:{staff_id:staff_id,customer_id:$route.params.id}}">发消息</van-tabbar-item>
         <!--<van-tabbar-item icon="chat" :to="{name:'chat',params:{staff_id:item.staff_id,customer_id:item.customer_id}}">发消息</van-tabbar-item>-->
         <van-tabbar-item icon="shop" :to="{name:'add'}">添加跟进</van-tabbar-item>

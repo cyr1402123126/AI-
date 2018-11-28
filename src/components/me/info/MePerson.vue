@@ -329,7 +329,7 @@
           .then(res=>{
             Toast('保存成功');
             this.$router.push('/me/list')
-          })
+        })
       },
       deleteImage(index) {
         this.$dialog.confirm({

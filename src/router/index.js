@@ -30,6 +30,10 @@ const CustomerInfo =()=>import('@/components/address/CustomerInfo')
 const Compile =()=>import('@/components/address/customerInfo/Compile')
 const Add =()=>import('@/components/address/customerInfo/Add')
 const AddTags =()=>import('@/components/address/customerInfo/AddTags')
+const Task =()=>import('@/components/address/customerInfo/Task')
+const AddressList =()=>import('@/components/address/customerInfo/task/List')
+const SaveList =()=>import('@/components/address/customerInfo/task/SaveList')
+const TaskInfo =()=>import('@/components/address/customerInfo/task/TaskInfo')
 
 const suggest =()=>import('@/components/me/suggest/suggest')
 const Confirmsuggest = ()=>import('@/components/me/suggest/Confirmsuggest')
@@ -68,6 +72,12 @@ export default new Router({
     {path:'/address/:id/compile',name:'compile',component:Compile,meta:{title:"资料详情"}},
     {path:'/address/:id/add',name:'add',component:Add,meta:{title:"跟进"}},
     {path:'/address/:id/addTags',name:'addTags',component:AddTags,meta:{title:"标签"}},
+    //新增任务列表
+    {path:'/address/:id/task/:taskId',name:'task',component:Task,meta:{title:"新建任务"}},
+    {path:'/address/:id/task/:taskId/addressList',name:'addressList',component:AddressList,meta:{title:"选择客户"}},
+    {path:'/address/:id/task/:taskId/saveList',name:'saveList',component:SaveList,meta:{title:"任务"}},
+    {path:'/address/:id/task/:taskId/saveList',name:'taskInfo',component:TaskInfo,meta:{title:"任务详情"}},
+
 
     //我的
     {path:'/me/myself',name:'myself',component:Myself,meta:{title:"我的动态"}},

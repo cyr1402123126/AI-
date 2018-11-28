@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="introduce" v-for="(item,index) in introduce" :key="index">
-      <!--<router-link :to="{name:'homeInfo',params:{userId:index}}">-->
+      <router-link :to="{name:'customerInfo',params:{id:item.customer_id}}">
       <h3>{{ item.day }}<span>{{ item.time }}</span></h3>
       <div class="introduce-box">
         <div class="clearfix">
@@ -12,7 +12,7 @@
         </div>
         <p>{{ item.action }}</p>
       </div>
-      <!--</router-link>-->
+      </router-link>
     </div>
   </div>
 </template>

@@ -1,39 +1,6 @@
 {
   "address.php": {
-    "data": [
-      {
-        "id": "1",
-        "name": "夏泡泡雪",
-        "src": "http://39.108.86.5/addons/images/info_test.png",
-        "content": "待跟进",
-        "time": "5分钟前",
-        "last": "最后活动"
-      },
-      {
-        "id": "1",
-        "name": "夏泡泡雪",
-        "src": "http://39.108.86.5/addons/images/info_test.png",
-        "content": "待跟进",
-        "time": "5分钟前",
-        "last": "最后活动"
-      },
-      {
-        "id": "1",
-        "name": "夏泡泡雪",
-        "src": "http://39.108.86.5/addons/images/info_test.png",
-        "content": "待跟进",
-        "time": "5分钟前",
-        "last": "最后活动"
-      },
-      {
-        "id": "1",
-        "name": "夏泡泡雪",
-        "src": "http://39.108.86.5/addons/images/info_test.png",
-        "content": "待跟进",
-        "time": "2分钟前",
-        "last": "最后活动"
-      }
-    ]
+    "sign": "重要客户"
   },
   "message.php": [
     {
@@ -751,5 +718,39 @@
         "id": 39
       }
     ]
+  },
+  "rank": {
+    "data": [
+      {
+        "time": "2018-11-20",
+        "list":[
+          {"id":1,"content":"工作态度","show":true,"isStar":false},
+          {"id":2,"content":1223,"show":true,"isStar":false},
+          {"id":3,"content":1224,"show":true,"isStar":false}
+        ]
+      },
+      {
+        "time": "2018-11-20",
+        "list":[
+          {"id":4,"content":"工作态度1","show":true,"isStar":false},
+          {"id":5,"content":1223,"show":true,"isStar":true},
+          {"id":6,"content":1224,"show":true,"isStar":false}
+        ]
+      },
+      {
+        "time": "2018-11-20",
+        "list":[
+          {"id":7,"content":"工作态度2","show":true,"isStar":false},
+          {"id":8,"content":1223,"show":true,"isStar":false},
+          {"id":9,"content":1224,"show":true,"isStar":false}
+        ]
+      }
+    ],
+    "showData" : [
+      {"id":1,"content":1222,"show":true},
+      {"id":2,"content":1223,"show":true},
+      {"id":6,"content":"工作态度","show":true}
+    ]
   }
+
 }

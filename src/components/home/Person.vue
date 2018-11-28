@@ -41,9 +41,11 @@
           <li @click="change(item,$event)" v-for="item in type" :key="item.sum"><img :src="item.src" alt=""> <span>{{ item.name }}</span>跟你在名片上互动了<span>{{item.time}}</span>次<span class="span"><img
             src="@/assets/images/more_bottom.png" class="arrow" alt=""></span>
             <div class="rader-ul" v-if="item.show">
-              <div class="rader-li"  v-for="value in item.look" :key="type.lasttime">
-                查看了你的{{ value.type }}<span>{{ value.lasttime }}</span>次
-              </div>
+              <router-link :to="{name:'customerInfo',params:{id:item.customer_id}}">
+                <div class="rader-li"  v-for="value in item.look" :key="type.lasttime">
+                  查看了你的{{ value.type }}<span>{{ value.lasttime }}</span>次
+                </div>
+              </router-link>
             </div>
           </li>
         </ul>

@@ -80,6 +80,8 @@
         if (action === 'confirm') {
           setTimeout(done, 1000);
           setTimeout(()=>{
+            this.startTime = this.startTime.split(',').join('-');
+            this.endTime = this.endTime.split(',').join('-');
             if (this.active) {
               this.axios.post('https://tc.wedotop.com/Api/action_behavior.php?type=behavior&token=4f36b41cc2d10a4a8f22d712fa342599',{
                 startTime:this.startTime,

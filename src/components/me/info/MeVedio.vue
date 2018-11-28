@@ -197,6 +197,8 @@
 
       getFiles(files){
         var reg = /[.](3gpp|mp2|mp3|mp4|mpeg|mpg|MP4|3GP|3GPP|RM|RMVB|AVI|WMV|MOV)$/.test(files[0].name);
+        console.log(reg);
+        console.log(files[0].name);
         if (parseInt(files[0].size) < 10000) {
           this.$toast.loading({
             mask: true,

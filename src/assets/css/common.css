@@ -92,3 +92,30 @@ img {
 .van-switch--on {
   background: #3b83ff;
 }
+textarea{
+  resize:none;
+  background: #fff;
+  width: 100%;
+  border: none;
+}
+.van-checkbox__label {
+  width: 8.8rem;
+}
+.van-checkbox__icon .van-icon {
+  width: 22px;
+  height: 22px;
+  margin-bottom: .55rem;
+}
+.van-checkbox__icon--checked .van-icon {
+  border-color: #3b83ff;
+  background-color: #3b83ff;
+}
+.van-checkbox__icon--round .van-icon {
+  border-radius: 15%;
+}
+.van-checkbox__icon .van-icon {
+  width: 20px;
+  height: 20px;
+  margin-bottom: .4rem;
+  /*border:1px solid #d6d6d6;*/
+}

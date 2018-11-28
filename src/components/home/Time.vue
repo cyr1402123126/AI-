@@ -31,6 +31,21 @@
           </ul>
         </div>
       </div>
+      <!--任务小助手-->
+      <h3 class="rank">任务小助手</h3>
+      <div class="help">
+        <div class="help-content">
+          <p>你今日有<span>{{ noFinished }}</span>个待完成</p>
+          <ul>
+            <li v-for="(item,index) in list" :key="index">{{ item.content }}</li>
+          </ul>
+        </div>
+        <router-link :to="{name:'saveList',params:{id : 0,taskId : 0}}">
+          <van-cell-group>
+            <van-cell title="查看今日任务" is-link />
+          </van-cell-group>
+        </router-link>
+      </div>
       <!--内容-->
       <Info :introduce="introduce"></Info>
     </vue-better-scroll>
@@ -73,7 +88,9 @@
         scrollToX: 0,
         scrollToY: 0,
         scrollToTime: 700,
-        items: []
+        items: [],
+        list : [],
+        noFinished : 0
       }
     },
     created(){
@@ -85,9 +102,16 @@
       // this.axios.get('introduce').then(res=>{
       //   console.log(res.data);
         // this.introduce=res.data
-        this.Statistics=res.data.Statistics
-        this.introduce=res.data.introduce
-    })
+        this.Statistics = res.data.Statistics;
+        this.introduce = res.data.introduce;
+      })
+      this.axios.get('card_task.php?type=card_task&token=32973e46d86ce0d4950b2bbade38963f&cate=today_task')
+        .then(res => {
+          let data = res.data.data;
+          this.noFinished = data.count;
+          this.list = data.data;
+          console.log(res.data.data);
+        })
     },
     components:{
       SelectTime,
@@ -285,6 +309,36 @@
     color: #0088ff;
     margin: 0 .1rem;
   }
-  .time-container {}
-  .time-container {}
+  .rank {
+    font-size: .46rem;
+    margin-bottom: .2rem;
+  }
+  .help {
+    color: #696969;
+    background: #fff;
+    margin-bottom: .6rem;
+    border: 1px solid #f3f3f3;
+    box-shadow:-.12rem .12rem .1rem rgba(0,0,0,.03);
+    box-sizing: border-box;
+    font-size: .40rem;
+  }
+  .help .help-content {
+    padding: .3rem .3rem .2rem .3rem;
+  }
+  .help p {
+    margin-bottom: .1rem;
+  }
+  .help ul {
+    font-size: .42rem;
+  }
+  .help ul li {
+    background: url("../../assets/images/square.png")no-repeat;
+    background-position: left center;
+    background-size: .55rem;
+    text-indent: .85rem;
+    line-height: 1.5;
+  }
+  .van-cell {
+    color: #3e84ff;
+  }
 </style>

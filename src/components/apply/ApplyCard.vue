@@ -185,6 +185,8 @@
     width: 1.25rem;
   }
   .apply-title .right img {
+    width: 1.25rem;
+    height: 1.25rem;
     border-radius: 50%;
   }
   .apply-title span {
